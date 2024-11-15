@@ -54,28 +54,29 @@ export function useMoonShape() {
       return null;
     }
 
-    if (phase === 0) {
-      return { icon: '🌑', text: 'New moon' };
+    const delta = 0.02;
+    if (phase < delta) {
+      return 'New moon';
     }
-    if (phase > 0 && phase < 0.25) {
-      return { icon: '🌒', text: 'Waxing Crescent' };
+    if (phase >= delta && phase < 0.25 - delta) {
+      return 'Waxing Crescent';
     }
-    if (phase === 0.25) {
-      return { icon: '🌓', text: 'First Quarter' };
+    if (phase >= 0.25 - delta && phase < 0.25 + delta) {
+      return 'First Quarter';
     }
-    if (phase > 0.25 && phase < 0.5) {
-      return { icon: '🌔', text: 'Waxing Gibbous' };
+    if (phase >= 0.25 + delta && phase < 0.55 - delta) {
+      return 'Waxing Gibbous';
     }
-    if (phase === 0.5) {
-      return { icon: '🌕', text: 'Full moon' };
+    if (phase >= 0.5 - delta && phase < 0.5 + delta) {
+      return 'Full moon';
     }
-    if (phase > 0.5 && phase < 0.75) {
-      return { icon: '🌖', text: 'Waning Gibbous' };
+    if (phase >= 0.5 + delta && phase < 0.75 - delta) {
+      return 'Waning Gibbous';
     }
-    if (phase === 0.75) {
-      return { icon: '🌗', text: 'Last Quarter' };
+    if (phase >= 0.75 - delta && phase < 0.75 + delta) {
+      return 'Last Quarter';
     }
-    return { icon: '🌘', text: 'Waning Crescent' };
+    return 'Waning Crescent';
   }, [moonData.phase]);
 }
 

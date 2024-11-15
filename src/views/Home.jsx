@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import fastMemo from 'react-fast-memo';
 
 import { MoonDirection } from '../components/MoonDirection';
+import { MoonPhase } from '../components/MoonPhase.jsx';
 import { MoonPosition } from '../components/MoonPosition';
 import { Countdown, MoonRiseSet } from '../components/MoonRiseSet';
 import { PageContent } from '../shared/browser/PageContent';
@@ -30,10 +31,8 @@ export const Home = fastMemo(() => {
 
         {!!moonShape && (
           <>
-            <h2 style={{ margin: '2rem 0 0' }}>{moonShape.text}</h2>
-            <div>
-              <span style={{ fontSize: '3em' }}>{moonShape.icon}</span>
-            </div>
+            <h2 style={{ margin: '2rem 0 0' }}>{moonShape}</h2>
+            <MoonPhase />
 
             <MoonDirection />
 

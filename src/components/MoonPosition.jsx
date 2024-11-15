@@ -2,11 +2,11 @@ import React from 'react';
 import fastMemo from 'react-fast-memo';
 import { useCat } from 'usecat';
 
-import { moonDataCat, useMoonShape } from '../store/moonCats.jsx';
+import { moonDataCat } from '../store/moonCats.jsx';
+import { MoonPhase } from './MoonPhase.jsx';
 
 export const MoonPosition = fastMemo(() => {
   const moonData = useCat(moonDataCat);
-  const moonShape = useMoonShape();
 
   const horizonLength = 220; // Total length of the horizontal line
   const angleInDegrees = (moonData.altitude * 180) / Math.PI; // Convert radians to degrees
@@ -52,16 +52,15 @@ export const MoonPosition = fastMemo(() => {
           strokeWidth="2"
         />
 
-        {/* Moon emoji */}
-        <text
-          x={eyeX + moonX}
-          y={eyeY + moonY}
-          fontSize="16"
-          textAnchor="middle"
-          dominantBaseline="middle"
+        {/* Embedded MoonPhase component using foreignObject */}
+        <foreignObject
+          x={eyeX + moonX - 10} // Adjust the position relative to the moon's coordinates
+          y={eyeY + moonY - 10} // Center the moon phase SVG
+          width="20"
+          height="20"
         >
-          {moonShape.icon}
-        </text>
+          <MoonPhase size={20} />
+        </foreignObject>
 
         {/* Person */}
         {/* Head */}
