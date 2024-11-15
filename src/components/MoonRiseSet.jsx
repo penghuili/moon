@@ -58,7 +58,7 @@ export const Countdown = fastMemo(() => {
   if (targetDate < new Date()) {
     return (
       <>
-        <h1>Moon is visible!</h1>
+        <h1 style={{ margin: '0' }}>Moon is visible!</h1>
         (if your sky is clear)
       </>
     );
@@ -71,7 +71,7 @@ export const Countdown = fastMemo(() => {
   return (
     <>
       Moon is visible in
-      <h1 style={{ margin: '0 0 0 1rem' }}>{timeLeft}</h1>
+      <h1 style={{ margin: '0' }}>{timeLeft}</h1>
       (if your sky is clear)
     </>
   );
