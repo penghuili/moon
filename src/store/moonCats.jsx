@@ -4,13 +4,14 @@ import React, { useEffect, useMemo } from 'react';
 import { getMoonIllumination, getMoonPosition, getMoonTimes, getTimes } from 'suncalc';
 import { createCat, useCat } from 'usecat';
 
+import { setToastEffect } from '../shared/browser/store/sharedEffects';
 import { formatDateTime } from '../shared/js/date';
 
 export const moonDataCat = createCat({});
 
 export function useMoonData(position) {
   useEffect(() => {
-    const updatePosition = () => {
+    const updatePosition = hideMessage => {
       if (position.latitude && position.longitude) {
         const now = new Date();
         const moonPos = getMoonPosition(now, position.latitude, position.longitude);
@@ -34,10 +35,14 @@ export function useMoonData(position) {
           tomorrowSunrise: tomorrowSunTimes.sunrise,
           tomorrowSunset: tomorrowSunTimes.sunset,
         });
+
+        if (!hideMessage) {
+          setToastEffect('Moon data is updated.');
+        }
       }
     };
 
-    updatePosition();
+    updatePosition(true);
 
     const timer = setInterval(updatePosition, 60000);
 
