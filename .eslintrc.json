@@ -1,0 +1,36 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:import/recommended",
+    "plugin:sonarjs/recommended-legacy"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react", "sonarjs"],
+  "rules": {
+    "react/prop-types": 0,
+    "react/no-unescaped-entities": 0,
+    "react/display-name": 0,
+    "sonarjs/no-duplicate-string": 0,
+    "react/jsx-no-target-blank": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
+}

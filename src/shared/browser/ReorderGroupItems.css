@@ -1,0 +1,50 @@
+.reorder-group-items-container {
+  height: var(--reorder-group-items-height, 70vh);
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 2px solid var(--reorder-group-items-border-color, #dbd8e0);
+  padding: 8px;
+}
+
+.reorder-group-items-content {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 100%;
+}
+
+.reorder-group-items-draggable {
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  user-select: none;
+  opacity: 1;
+  background-color: var(--reorder-group-items-background-color, white);
+  border: 1px solid var(--reorder-group-items-border-color, #dbd8e0);
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.reorder-group-items-drag-handle {
+  cursor: grab;
+  font-size: 20px;
+  user-select: none;
+  margin-right: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+}
+
+.reorder-group-items-drag-handle:active {
+  cursor: grabbing;
+}
+
+.reorder-group-items-drag-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
