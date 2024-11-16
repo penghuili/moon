@@ -16,8 +16,6 @@ export const MoonDirection = fastMemo(() => {
     return (azimuthDegrees + 360) % 360;
   }, [moonData.azimuth]);
 
-  console.log(moonDirection);
-
   return (
     <div style={{ padding: '0 1rem 0.5rem 0' }}>
       <Cross degree={moonDirection} />

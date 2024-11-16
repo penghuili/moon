@@ -77,29 +77,37 @@ export function useMoonShape() {
       return null;
     }
 
+    const percentageOfLightPart = ((phase <= 0.5 ? phase / 0.5 : (1 - phase) / 0.5) * 100).toFixed(
+      2
+    );
+
     const delta = 0.03;
+    let message;
     if (phase < delta) {
-      return 'New moon';
+      message = 'New moon';
     }
     if (phase >= delta && phase < 0.25 - delta) {
-      return 'Waxing Crescent';
+      message = 'Waxing Crescent';
     }
     if (phase >= 0.25 - delta && phase < 0.25 + delta) {
-      return 'First Quarter';
+      message = 'First Quarter';
     }
     if (phase >= 0.25 + delta && phase < 0.55 - delta) {
-      return 'Waxing Gibbous';
+      message = 'Waxing Gibbous';
     }
     if (phase >= 0.5 - delta && phase < 0.5 + delta) {
-      return 'Full moon';
+      message = 'Full moon';
     }
     if (phase >= 0.5 + delta && phase < 0.75 - delta) {
-      return 'Waning Gibbous';
+      message = 'Waning Gibbous';
     }
     if (phase >= 0.75 - delta && phase < 0.75 + delta) {
-      return 'Last Quarter';
+      message = 'Last Quarter';
+    } else {
+      message = 'Waning Crescent';
     }
-    return 'Waning Crescent';
+
+    return `${message} (${percentageOfLightPart}%)`;
   }, [moonData.phase]);
 }
 
