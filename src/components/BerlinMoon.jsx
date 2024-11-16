@@ -12,7 +12,7 @@ export const BerlinMoon = fastMemo(() => {
 
   if (position?.isDefault && !isChecking) {
     return (
-      <Flex align="center" gap="1rem" m="0 0 1rem">
+      <Flex align="center" gap="1rem" m="1rem 0">
         <Typography.Title heading={5}>Moon in Berlin</Typography.Title>
       </Flex>
     );
