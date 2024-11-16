@@ -43,7 +43,7 @@ export const Home = fastMemo(() => {
                 </div>
               }
               shadows="always"
-              style={{ width: '100%', maxWidth: 500, margin: '0 auto' }}
+              style={{ width: '100%', maxWidth: 500, margin: '1rem auto 0' }}
               bodyStyle={{ padding: 0 }}
             >
               <Flex direction="row" justify="center" align="end" p="0 1rem 0 0">
