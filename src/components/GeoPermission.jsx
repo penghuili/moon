@@ -9,7 +9,7 @@ import { isCheckingGeoPermissionCat, positionCat } from '../store/moonCats.jsx';
 const permissionStateCat = createCat(null);
 
 function getUserLocation() {
-  navigator.geolocation.getCurrentPosition(
+  return navigator.geolocation.getCurrentPosition(
     pos => {
       const { latitude, longitude } = pos.coords;
       positionCat.set({ latitude, longitude });
@@ -41,7 +41,7 @@ export const GeoPermission = fastMemo(() => {
         .then(result => {
           if (result.state === 'granted') {
             permissionStateCat.set('granted');
-            getUserLocation();
+            return getUserLocation();
           } else if (result.state === 'prompt') {
             permissionStateCat.set('prompt');
           } else if (result.state === 'denied') {
