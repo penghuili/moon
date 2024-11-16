@@ -8,6 +8,7 @@ import { setToastEffect } from '../shared/browser/store/sharedEffects';
 import { formatDateTime } from '../shared/js/date';
 
 export const moonDataCat = createCat({});
+export const phoneNorthCat = createCat(null);
 
 export function useMoonData(position) {
   useEffect(() => {
