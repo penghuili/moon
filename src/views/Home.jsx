@@ -20,7 +20,7 @@ export const Home = fastMemo(() => {
 
   return (
     <PageContent paddingBottom="0">
-      <div style={{ textAlign: 'center', padding: '20px' }}>
+      <div style={{ textAlign: 'center' }}>
         <BerlinMoon />
 
         {!!moonShape && (
