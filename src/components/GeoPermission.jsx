@@ -66,8 +66,9 @@ export const GeoPermission = fastMemo(() => {
         <Button theme="solid" disabled={permissionState !== 'prompt'} onClick={handleRequest}>
           Show moon in my location
         </Button>
-        <Typography.Text>(Your location is only used in your browser)</Typography.Text>
-        <Typography.Text>{permissionState}</Typography.Text>
+        <Typography.Text>
+          (Your location is only used in your browser, it's never sent anywhere)
+        </Typography.Text>
         {permissionState === 'denied' && (
           <Typography.Text type="danger">
             Location permission is denied. Please enable it in your browser settings.
