@@ -1,51 +1,68 @@
-import { Typography } from '@douyinfe/semi-ui';
 import { addDays, subDays } from 'date-fns';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { getMoonIllumination, getMoonPosition, getMoonTimes, getTimes } from 'suncalc';
 import { createCat, useCat } from 'usecat';
 
 import { setToastEffect } from '../shared/browser/store/sharedEffects';
-import { formatDateTime } from '../shared/js/date';
+import { add0 } from '../shared/js/utils';
 
+export const positionCat = createCat(null);
 export const moonDataCat = createCat({});
 export const phoneNorthCat = createCat(null);
 
-export function useMoonData(position) {
+export function useGeoLocation() {
   useEffect(() => {
-    const updatePosition = hideMessage => {
-      if (position.latitude && position.longitude) {
-        const now = new Date();
-        const moonPos = getMoonPosition(now, position.latitude, position.longitude);
-        const moonIllum = getMoonIllumination(now);
-        const sunTimes = getTimes(now, position.latitude, position.longitude);
-        const tomorrowSunTimes = getTimes(addDays(now, 1), position.latitude, position.longitude);
-        const moonTimes = getMoonRiseAndSet(position);
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const { latitude, longitude } = pos.coords;
+        positionCat.set({ latitude, longitude });
+      },
+      error => console.error(error),
+      { enableHighAccuracy: true }
+    );
+  }, []);
+}
 
-        const isNight = now >= sunTimes.night && now < sunTimes.nightEnd;
-        const isAboveHorizon = moonPos.altitude > 0;
+export function updateMoonData(hideMessage) {
+  const position = positionCat.get();
 
-        moonDataCat.set({
-          azimuth: moonPos.azimuth,
-          altitude: moonPos.altitude,
-          phase: moonIllum.phase,
-          visible: isAboveHorizon && isNight,
-          rise: moonTimes?.rise,
-          set: moonTimes?.set,
-          sunrise: sunTimes.sunrise,
-          sunset: sunTimes.sunset,
-          tomorrowSunrise: tomorrowSunTimes.sunrise,
-          tomorrowSunset: tomorrowSunTimes.sunset,
-        });
+  if (position?.latitude !== undefined && position?.longitude !== undefined) {
+    const now = new Date();
+    const moonPos = getMoonPosition(now, position.latitude, position.longitude);
+    const moonIllum = getMoonIllumination(now);
+    const sunTimes = getTimes(now, position.latitude, position.longitude);
+    const tomorrowSunTimes = getTimes(addDays(now, 1), position.latitude, position.longitude);
+    const moonTimes = getMoonRiseAndSet(position);
 
-        if (!hideMessage) {
-          setToastEffect('Moon data is updated.');
-        }
-      }
-    };
+    const isNight = now >= sunTimes.night && now < sunTimes.nightEnd;
+    const isAboveHorizon = moonPos.altitude > 0;
 
-    updatePosition(true);
+    moonDataCat.set({
+      azimuth: moonPos.azimuth,
+      altitude: moonPos.altitude,
+      phase: moonIllum.phase,
+      visible: isAboveHorizon && isNight,
+      rise: moonTimes?.rise,
+      set: moonTimes?.set,
+      sunrise: sunTimes.sunrise,
+      sunset: sunTimes.sunset,
+      tomorrowSunrise: tomorrowSunTimes.sunrise,
+      tomorrowSunset: tomorrowSunTimes.sunset,
+    });
 
-    const timer = setInterval(updatePosition, 60000);
+    if (!hideMessage) {
+      setToastEffect('Data is updated.');
+    }
+  }
+}
+
+export function useMoonData() {
+  const position = useCat(positionCat);
+
+  useEffect(() => {
+    updateMoonData(true);
+
+    const timer = setInterval(updateMoonData, 60000);
 
     return () => clearInterval(timer);
   }, [position]);
@@ -99,63 +116,33 @@ export function useMoonTimes() {
     }
 
     const arr = [];
-    const moonrise = { key: 'Moonrise', value: formatDateTime(moonData.rise) };
+    const moonrise = { key: 'Moonrise', label: 'Moonrise', date: moonData.rise };
     arr.push(moonrise);
+
     if (moonData.sunrise > moonData.rise && moonData.sunrise < moonData.set) {
       if (moonData.sunrise > new Date()) {
         moonrise.start = true;
-        moonrise.date = moonData.sunrise;
       }
-      arr.push({
-        key: 'VISIBLE for',
-        value: (
-          <Typography.Text strong type="success">
-            {getTimeDifference(new Date(), moonData.sunrise)}
-          </Typography.Text>
-        ),
-      });
-      arr.push({ key: 'Sunrise', value: formatDateTime(moonData.sunrise) });
+      arr.push({ key: 'Sunrise', label: 'Sunrise', date: moonData.sunrise });
     }
 
     if (moonData.sunset > moonData.rise && moonData.sunset < moonData.set) {
+      arr.push({
+        key: 'Sunset',
+        label: 'Sunset',
+        date: moonData.sunset,
+        start: true,
+      });
       if (moonData.tomorrowSunrise < moonData.set) {
         arr.push({
-          key: 'Sunset',
-          value: formatDateTime(moonData.sunset),
-          start: true,
-          date: moonData.sunset,
-        });
-        arr.push({
-          key: 'VISIBLE for',
-          value: (
-            <Typography.Text strong type="success">
-              {getTimeDifference(moonData.sunset, moonData.tomorrowSunrise)}
-            </Typography.Text>
-          ),
-        });
-        arr.push({
-          key: 'Sunrise',
-          value: formatDateTime(moonData.tomorrowSunrise),
-        });
-      } else {
-        arr.push({
-          key: 'Sunset',
-          value: formatDateTime(moonData.sunset),
-          start: moonData.set > new Date(),
-          date: moonData.sunset,
-        });
-        arr.push({
-          key: 'VISIBLE for',
-          value: (
-            <Typography.Text strong type="success">
-              {getTimeDifference(moonData.sunset, moonData.set)}
-            </Typography.Text>
-          ),
+          key: 'SunriseTomorrow',
+          label: 'Sunrise',
+          date: moonData.tomorrowSunrise,
         });
       }
     }
 
-    arr.push({ key: 'Moonset', value: formatDateTime(moonData.set) });
+    arr.push({ key: 'Moonset', label: 'Moonset', date: moonData.set });
 
     return arr;
   }, [moonData.rise, moonData.set, moonData.sunrise, moonData.sunset, moonData.tomorrowSunrise]);
@@ -205,9 +192,9 @@ export function getTimeDifference(date1, date2) {
   const minutes = Math.floor((diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((diffInMilliseconds % (1000 * 60)) / 1000);
 
-  const hoursString = hours > 0 ? `${hours} hours ` : '';
-  const minutesString = minutes > 0 ? `${minutes} minutes ` : '';
-  const secondsString = `${seconds} seconds`;
+  const hoursString = hours > 0 ? `${hours}:` : '';
+  const minutesString = minutes > 0 || hours > 0 ? `${add0(minutes)}:` : '';
+  const secondsString = `${add0(seconds)}`;
 
   return `${hoursString}${minutesString}${secondsString}`.trim();
 }

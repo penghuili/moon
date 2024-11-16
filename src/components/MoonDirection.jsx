@@ -4,15 +4,10 @@ import React, { useMemo } from 'react';
 import fastMemo from 'react-fast-memo';
 import { useCat } from 'usecat';
 
-import { isCompassSupported } from '../lib/compass.js';
-import { RouteLink } from '../shared/semi/RouteLink.jsx';
-import { moonDataCat, phoneNorthCat } from '../store/moonCats.jsx';
-import { usePhoneDirection } from '../store/usePhoneDirection.js';
+import { moonDataCat } from '../store/moonCats.jsx';
 
 export const MoonDirection = fastMemo(() => {
   const moonData = useCat(moonDataCat);
-  const phoneDirection = usePhoneDirection();
-  const phoneNorth = useCat(phoneNorthCat);
 
   const moonDirection = useMemo(() => {
     if (!moonData.azimuth) {
@@ -23,48 +18,34 @@ export const MoonDirection = fastMemo(() => {
     return (azimuthDegrees + 360) % 360;
   }, [moonData.azimuth]);
 
-  const rotateDegrees = useMemo(() => {
-    if (phoneNorth !== null && phoneDirection !== null) {
-      return moonDirection - phoneDirection - phoneNorth;
-    }
-
-    return moonDirection;
-  }, [moonDirection, phoneDirection, phoneNorth]);
-
   return (
-    <div>
-      <h2 style={{ margin: '3rem 0 0' }}>Direction</h2>
-      {phoneNorth === null && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            width: 200,
-            margin: '0 auto',
-          }}
-        >
-          <RiArrowUpDoubleLine />
-          <Typography.Text type="secondary" size="small">
-            North
-          </Typography.Text>
-        </div>
-      )}
+    <div style={{ position: 'relative' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          position: 'absolute',
+          top: -10,
+          right: -35,
+        }}
+      >
+        <RiArrowUpDoubleLine />
+        <Typography.Text type="secondary" size="small">
+          North
+        </Typography.Text>
+      </div>
 
       <div
         style={{
-          width: 80,
-          height: 80,
-          transform: `rotate(${rotateDegrees}deg)`,
+          width: 60,
+          height: 60,
+          transform: `rotate(${moonDirection}deg)`,
           margin: '0 auto',
         }}
       >
-        <RiArrowUpFill size={80} color="#FFC850" />
+        <RiArrowUpFill size={60} color="#FFC850" />
       </div>
-
-      {isCompassSupported() && phoneNorth === null && (
-        <RouteLink to="/compass">Calibrate compass</RouteLink>
-      )}
     </div>
   );
 });

@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { Card, Divider } from '@douyinfe/semi-ui';
+import { RiRefreshLine } from '@remixicon/react';
+import React from 'react';
 import fastMemo from 'react-fast-memo';
 
 import { MoonDirection } from '../components/MoonDirection';
@@ -6,37 +8,52 @@ import { MoonPhase } from '../components/MoonPhase.jsx';
 import { MoonPosition } from '../components/MoonPosition';
 import { Countdown, MoonRiseSet } from '../components/MoonRiseSet';
 import { PageContent } from '../shared/browser/PageContent';
-import { useMoonData, useMoonShape } from '../store/moonCats.jsx';
+import { Flex } from '../shared/semi/Flex.jsx';
+import { IconButton } from '../shared/semi/IconButton.jsx';
+import { updateMoonData, useGeoLocation, useMoonData, useMoonShape } from '../store/moonCats.jsx';
 
 export const Home = fastMemo(() => {
-  const [position, setPosition] = useState({ latitude: null, longitude: null });
-  useMoonData(position);
+  useGeoLocation();
+  useMoonData();
   const moonShape = useMoonShape();
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        const { latitude, longitude } = pos.coords;
-        setPosition({ latitude, longitude });
-      },
-      error => console.error(error),
-      { enableHighAccuracy: true }
-    );
-  }, []);
 
   return (
     <PageContent paddingBottom="0">
       <div style={{ textAlign: 'center', padding: '20px' }}>
-        <Countdown />
-
         {!!moonShape && (
           <>
-            <h2 style={{ margin: '2rem 0 0' }}>{moonShape}</h2>
-            <MoonPhase />
+            <Card
+              title={<Card.Meta title={moonShape} />}
+              headerExtraContent={
+                <IconButton
+                  theme="borderless"
+                  icon={<RiRefreshLine />}
+                  onClick={() => updateMoonData()}
+                />
+              }
+              cover={
+                <div>
+                  <div style={{ padding: '1rem 0' }}>
+                    <MoonPhase />
+                  </div>
+                  <Divider />
+                </div>
+              }
+              shadows="always"
+              style={{ width: '100%', maxWidth: 500, margin: '0 auto' }}
+              bodyStyle={{ padding: 0 }}
+            >
+              <Flex direction="row" justify="around" align="end" p="0 1rem 0 0">
+                <MoonDirection />
+                <MoonPosition />
+              </Flex>
 
-            <MoonDirection />
+              <Divider />
 
-            <MoonPosition />
+              <div style={{ padding: '1rem 0' }}>
+                <Countdown />
+              </div>
+            </Card>
 
             <MoonRiseSet />
           </>

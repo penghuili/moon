@@ -3,7 +3,6 @@ import { BabyRoutes } from 'react-baby-router';
 import fastMemo from 'react-fast-memo';
 
 import { isMobileWidth } from './shared/browser/device.js';
-import { CalibrateCompass } from './views/CalibrateCompass.jsx';
 import { Home } from './views/Home.jsx';
 
 export function Router() {
@@ -11,7 +10,6 @@ export function Router() {
 }
 
 const publicRoutes = {
-  '/compass': CalibrateCompass,
   '/': Home,
 };
 

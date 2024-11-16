@@ -8,29 +8,32 @@ import { MoonPhase } from './MoonPhase.jsx';
 export const MoonPosition = fastMemo(() => {
   const moonData = useCat(moonDataCat);
 
-  const horizonLength = 220; // Total length of the horizontal line
+  const horizonLength = 150; // Total length of the horizontal line
   const angleInDegrees = (moonData.altitude * 180) / Math.PI; // Convert radians to degrees
   // const angleInDegrees = -45;
 
   // Calculate the dynamic moon line length to extend to the horizon's end
-  const moonLineLength = 200; // Half of the horizon line, from the person to the edge
+  const moonLineLength = 140; // Half of the horizon line, from the person to the edge
 
   // Calculate moon's position based on altitude angle
   const moonX = moonLineLength * Math.cos((angleInDegrees * Math.PI) / 180);
   const moonY = -moonLineLength * Math.sin((angleInDegrees * Math.PI) / 180);
 
-  const height = Math.abs(moonY) + 60;
+  const height = Math.abs(moonY) + 80;
 
   // Person's eye position
   const eyeX = 20; // Horizontal position of the person
   const eyeY = angleInDegrees < 0 ? 20 : height - 40; // Eye position slightly above the head's center
 
   return (
-    <div>
-      <h2 style={{ margin: '3rem 0 0' }}>
-        {moonData.altitude > 0 ? 'Above Horizon' : 'Below Horizon'}{' '}
-      </h2>
-      <svg width="230" height={height} viewBox={`0 0 230 ${height}`}>
+    <div style={{ paddingLeft: '0.5rem', borderLeft: '1px solid var(--semi-color-border)' }}>
+      {/* <h2>{moonData.altitude > 0 ? 'Above Horizon' : 'Below Horizon'} </h2> */}
+      <svg
+        width="160"
+        height={height}
+        viewBox={`0 0 160 ${height}`}
+        style={{ overflow: 'visible' }}
+      >
         {/* Horizon line */}
         <line
           x1={eyeX}
