@@ -3,6 +3,8 @@ import { RiRefreshLine } from '@remixicon/react';
 import React from 'react';
 import fastMemo from 'react-fast-memo';
 
+import { BerlinMoon } from '../components/BerlinMoon.jsx';
+import { GeoPermission } from '../components/GeoPermission.jsx';
 import { MoonDirection } from '../components/MoonDirection';
 import { MoonPhase } from '../components/MoonPhase.jsx';
 import { MoonPosition } from '../components/MoonPosition';
@@ -10,16 +12,17 @@ import { Countdown, MoonRiseSet } from '../components/MoonRiseSet';
 import { PageContent } from '../shared/browser/PageContent';
 import { Flex } from '../shared/semi/Flex.jsx';
 import { IconButton } from '../shared/semi/IconButton.jsx';
-import { updateMoonData, useGeoLocation, useMoonData, useMoonShape } from '../store/moonCats.jsx';
+import { updateMoonData, useMoonData, useMoonShape } from '../store/moonCats.jsx';
 
 export const Home = fastMemo(() => {
-  useGeoLocation();
   useMoonData();
   const moonShape = useMoonShape();
 
   return (
     <PageContent paddingBottom="0">
       <div style={{ textAlign: 'center', padding: '20px' }}>
+        <BerlinMoon />
+
         {!!moonShape && (
           <>
             <Card
@@ -54,6 +57,8 @@ export const Home = fastMemo(() => {
                 <Countdown />
               </div>
             </Card>
+
+            <GeoPermission />
 
             <MoonRiseSet />
           </>

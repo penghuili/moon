@@ -5,7 +5,7 @@
     /* Inner glow */ 0 0 10px red,
     /* Middle glow */ 0 0 20px red,
     /* Outer glow */ 0 0 40px red; /* Strong outer glow */
-  animation: glow 1.5s infinite alternate;
+  animation: glow 0.5s infinite alternate;
 }
 
 @keyframes glow {
