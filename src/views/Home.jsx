@@ -43,7 +43,7 @@ export const Home = fastMemo(() => {
               style={{ width: '100%', maxWidth: 500, margin: '0 auto' }}
               bodyStyle={{ padding: 0 }}
             >
-              <Flex direction="row" justify="around" align="end" p="0 1rem 0 0">
+              <Flex direction="row" justify="center" align="end" p="0 1rem 0 0">
                 <MoonDirection />
                 <MoonPosition />
               </Flex>

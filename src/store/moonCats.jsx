@@ -77,7 +77,7 @@ export function useMoonShape() {
       return null;
     }
 
-    const delta = 0.02;
+    const delta = 0.03;
     if (phase < delta) {
       return 'New moon';
     }

@@ -1,5 +1,3 @@
-import { Typography } from '@douyinfe/semi-ui';
-import { RiArrowUpDoubleLine, RiArrowUpFill } from '@remixicon/react';
 import React, { useMemo } from 'react';
 import fastMemo from 'react-fast-memo';
 import { useCat } from 'usecat';
@@ -18,34 +16,62 @@ export const MoonDirection = fastMemo(() => {
     return (azimuthDegrees + 360) % 360;
   }, [moonData.azimuth]);
 
-  return (
-    <div style={{ position: 'relative' }}>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          position: 'absolute',
-          top: -10,
-          right: -35,
-        }}
-      >
-        <RiArrowUpDoubleLine />
-        <Typography.Text type="secondary" size="small">
-          North
-        </Typography.Text>
-      </div>
+  console.log(moonDirection);
 
-      <div
-        style={{
-          width: 60,
-          height: 60,
-          transform: `rotate(${moonDirection}deg)`,
-          margin: '0 auto',
-        }}
-      >
-        <RiArrowUpFill size={60} color="#FFC850" />
-      </div>
+  return (
+    <div style={{ padding: '0 1rem 0.5rem 0' }}>
+      <Cross degree={moonDirection} />
     </div>
+  );
+});
+
+const Cross = fastMemo(({ degree }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="80"
+      height="80"
+      viewBox="0 0 200 200"
+      style={{ display: 'block', margin: '0 auto', overflow: 'visible' }}
+    >
+      {/* Outer Circle */}
+      <circle cx="100" cy="100" r="95" stroke="black" strokeWidth="3" fill="#f5f5dc" />
+
+      {/* Inner Circle */}
+      <circle cx="100" cy="100" r="80" stroke="black" strokeWidth="1" fill="none" />
+
+      {/* Compass Rose */}
+      <g>
+        <polygon
+          points="100,10 105,100 100,190 95,100"
+          fill="gold"
+          stroke="black"
+          strokeWidth="1"
+        />
+        <polygon
+          points="10,100 100,95 190,100 100,105"
+          fill="gold"
+          stroke="black"
+          strokeWidth="1"
+        />
+      </g>
+
+      {/* North Label */}
+      <text
+        x="100"
+        y="0" // Adjusted position to move "N" outside the circle
+        textAnchor="middle"
+        fontSize="24" // Increased font size
+        fontWeight="bold"
+        fill="black"
+      >
+        N
+      </text>
+
+      {/* Red Arrow */}
+      <g transform={`rotate(${degree}, 100, 100)`}>
+        <polygon points="100,20 104,100 96,100" fill="red" />
+      </g>
+    </svg>
   );
 });
