@@ -10,6 +10,7 @@ import { MoonPhase } from '../components/MoonPhase.jsx';
 import { MoonPosition } from '../components/MoonPosition';
 import { Countdown, MoonRiseSet } from '../components/MoonRiseSet';
 import { PageContent } from '../shared/browser/PageContent';
+import { AlsoBuilt } from '../shared/semi/AlsoBuilt.jsx';
 import { Flex } from '../shared/semi/Flex.jsx';
 import { IconButton } from '../shared/semi/IconButton.jsx';
 import { updateMoonData, useMoonData, useMoonShape } from '../store/moonCats.jsx';
@@ -64,6 +65,10 @@ export const Home = fastMemo(() => {
           </>
         )}
       </div>
+
+      <Divider margin="1rem" />
+
+      <AlsoBuilt showBeer />
     </PageContent>
   );
 });

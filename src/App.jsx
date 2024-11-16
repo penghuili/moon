@@ -9,7 +9,7 @@ import { AppWrapper } from './shared/semi/AppWrapper.jsx';
 
 initShared({
   logo: '/icons/icon-192.png',
-  app: apps['easyy.click'].name,
+  app: apps.moon.name,
   privacyUrl: 'https://easyy.click/privacy',
   termsUrl: 'https://easyy.click/terms',
   resetPassword: false,
