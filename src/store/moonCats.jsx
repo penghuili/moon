@@ -6,6 +6,7 @@ import { createCat, useCat } from 'usecat';
 import { setToastEffect } from '../shared/browser/store/sharedEffects';
 import { add0 } from '../shared/js/utils';
 
+export const isCheckingGeoPermissionCat = createCat(false);
 export const positionCat = createCat({ latitude: 52.52, longitude: 13.41, isDefault: true });
 export const moonDataCat = createCat({});
 export const phoneNorthCat = createCat(null);

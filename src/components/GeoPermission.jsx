@@ -4,7 +4,7 @@ import fastMemo from 'react-fast-memo';
 import { useCat } from 'usecat';
 
 import { Flex } from '../shared/semi/Flex.jsx';
-import { positionCat } from '../store/moonCats.jsx';
+import { isCheckingGeoPermissionCat, positionCat } from '../store/moonCats.jsx';
 
 function getUserLocation() {
   navigator.geolocation.getCurrentPosition(
@@ -19,6 +19,7 @@ function getUserLocation() {
 
 export const GeoPermission = fastMemo(() => {
   const position = useCat(positionCat);
+  const isChecking = useCat(isCheckingGeoPermissionCat);
 
   const [permissionState, setPermissionState] = useState(null);
 
@@ -28,6 +29,7 @@ export const GeoPermission = fastMemo(() => {
 
   useEffect(() => {
     if (navigator.permissions) {
+      isCheckingGeoPermissionCat.set(true);
       navigator.permissions
         .query({ name: 'geolocation' })
         .then(result => {
@@ -43,7 +45,8 @@ export const GeoPermission = fastMemo(() => {
         .catch(error => {
           setPermissionState('error');
           console.log(error);
-        });
+        })
+        .finally(() => isCheckingGeoPermissionCat.set(false));
     } else {
       setPermissionState('not-supported');
       // Fallback for older browsers
@@ -51,7 +54,7 @@ export const GeoPermission = fastMemo(() => {
     }
   }, []);
 
-  if (position?.isDefault) {
+  if (position?.isDefault && !isChecking) {
     return (
       <Flex align="center" m="1rem 0 0">
         <Button theme="solid" disabled={permissionState !== 'prompt'} onClick={handleRequest}>
