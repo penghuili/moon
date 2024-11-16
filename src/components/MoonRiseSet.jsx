@@ -6,6 +6,7 @@ import { useCat } from 'usecat';
 import { formatDateTime } from '../shared/js/date.js';
 import { Flex } from '../shared/semi/Flex';
 import { getTimeDifference, moonDataCat, useMoonTimes } from '../store/moonCats.jsx';
+import styles from './MoonRiseSet.module.css';
 
 export const MoonRiseSet = fastMemo(() => {
   const moonData = useCat(moonDataCat);
@@ -37,18 +38,17 @@ const MoonRiseSetDates = fastMemo(() => {
       style={{ textAlign: 'left', width: '100%', maxWidth: 400, margin: '2rem auto 0' }}
     >
       <Timeline>
-        {data.map((i, index) => (
-          <Timeline.Item key={i.key} time={formatDateTime(i.date)}>
-            {i.label}
-            {i.start && (
-              <Typography.Paragraph>
-                Moon is visible for{' '}
-                <Typography.Text strong type="success">
-                  {getTimeDifference(i.date, data[index + 1]?.date)}
-                </Typography.Text>
-                .
-              </Typography.Paragraph>
-            )}
+        {data.map(i => (
+          <Timeline.Item
+            key={i.key}
+            time={formatDateTime(i.date)}
+            style={{
+              backgroundColor: i.visible ? 'var(--semi-color-warning-light-active)' : undefined,
+            }}
+          >
+            <Typography.Text className={i.key === 'Now' ? styles.glowingText : ''}>
+              {i.label}
+            </Typography.Text>
           </Timeline.Item>
         ))}
       </Timeline>

@@ -23,7 +23,7 @@ export const Home = fastMemo(() => {
         {!!moonShape && (
           <>
             <Card
-              title={<Card.Meta title={moonShape} />}
+              title={<Card.Meta title={moonShape.message} />}
               headerExtraContent={
                 <IconButton
                   theme="borderless"

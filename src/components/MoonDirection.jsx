@@ -1,3 +1,4 @@
+import { Typography } from '@douyinfe/semi-ui';
 import React, { useMemo } from 'react';
 import fastMemo from 'react-fast-memo';
 import { useCat } from 'usecat';
@@ -16,9 +17,20 @@ export const MoonDirection = fastMemo(() => {
     return (azimuthDegrees + 360) % 360;
   }, [moonData.azimuth]);
 
+  const rounded = Math.round(moonDirection);
   return (
-    <div style={{ padding: '0 1rem 0.5rem 0' }}>
+    <div style={{ padding: '0 1.5rem 0.5rem 0', position: 'relative' }}>
       <Cross degree={moonDirection} />
+      <Typography.Text
+        style={{
+          position: 'absolute',
+          bottom: -6,
+          right: rounded > 99 ? -12 : -8,
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        {rounded}°
+      </Typography.Text>
     </div>
   );
 });
@@ -68,7 +80,7 @@ const Cross = fastMemo(({ degree }) => {
 
       {/* Red Arrow */}
       <g transform={`rotate(${degree}, 100, 100)`}>
-        <polygon points="100,20 104,100 96,100" fill="red" />
+        <polygon points="100,25 108,100 92,100" fill="red" stroke="black" strokeWidth="2" />
       </g>
     </svg>
   );

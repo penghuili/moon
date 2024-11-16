@@ -107,7 +107,7 @@ export function useMoonShape() {
       message = 'Waning Crescent';
     }
 
-    return `${message} (${percentageOfLightPart}%)`;
+    return { message, percent: percentageOfLightPart };
   }, [moonData.phase]);
 }
 
@@ -124,33 +124,63 @@ export function useMoonTimes() {
     }
 
     const arr = [];
+    let hasNow = false;
     const moonrise = { key: 'Moonrise', label: 'Moonrise', date: moonData.rise };
     arr.push(moonrise);
 
     if (moonData.sunrise > moonData.rise && moonData.sunrise < moonData.set) {
       if (moonData.sunrise > new Date()) {
         moonrise.start = true;
+        moonrise.endDate = moonData.sunrise;
+        moonrise.visible = true;
       }
-      arr.push({ key: 'Sunrise', label: 'Sunrise', date: moonData.sunrise });
+      if (!hasNow && moonData.sunrise > new Date()) {
+        hasNow = true;
+        arr.push({ key: 'Now', label: 'Now', date: new Date(), visible: true });
+      }
+      arr.push({ key: 'Sunrise', label: 'Sunrise', date: moonData.sunrise, visible: true });
     }
 
     if (moonData.sunset > moonData.rise && moonData.sunset < moonData.set) {
-      arr.push({
+      if (!hasNow && moonData.sunset > new Date()) {
+        hasNow = true;
+        arr.push({ key: 'Now', label: 'Now', date: new Date() });
+      }
+      const sunsetData = {
         key: 'Sunset',
         label: 'Sunset',
         date: moonData.sunset,
         start: true,
-      });
+        visible: true,
+      };
+      arr.push(sunsetData);
       if (moonData.tomorrowSunrise < moonData.set) {
+        if (!hasNow && moonData.tomorrowSunrise > new Date()) {
+          hasNow = true;
+          arr.push({ key: 'Now', label: 'Now', date: new Date(), visible: true });
+        }
+        sunsetData.endDate = moonData.tomorrowSunrise;
         arr.push({
           key: 'SunriseTomorrow',
           label: 'Sunrise',
           date: moonData.tomorrowSunrise,
+          visible: true,
         });
+        if (!hasNow && moonData.set > new Date()) {
+          hasNow = true;
+          arr.push({ key: 'Now', label: 'Now', date: new Date() });
+        }
+        arr.push({ key: 'Moonset', label: 'Moonset', date: moonData.set });
+      } else {
+        sunsetData.endDate = moonData.set;
+
+        if (!hasNow && moonData.set > new Date()) {
+          hasNow = true;
+          arr.push({ key: 'Now', label: 'Now', date: new Date(), visible: true });
+        }
+        arr.push({ key: 'Moonset', label: 'Moonset', date: moonData.set, visible: true });
       }
     }
-
-    arr.push({ key: 'Moonset', label: 'Moonset', date: moonData.set });
 
     return arr;
   }, [moonData.rise, moonData.set, moonData.sunrise, moonData.sunset, moonData.tomorrowSunrise]);
