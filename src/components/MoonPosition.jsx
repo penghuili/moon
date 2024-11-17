@@ -1,8 +1,10 @@
+import { Tooltip } from '@douyinfe/semi-ui';
 import React from 'react';
 import fastMemo from 'react-fast-memo';
 import { useCat } from 'usecat';
 
 import { moonDataCat } from '../store/moonCats.jsx';
+import { InfoIconForTooltip } from './InfoIconForTooltip.jsx';
 import { MoonPhase } from './MoonPhase.jsx';
 
 export const MoonPosition = fastMemo(() => {
@@ -41,7 +43,13 @@ export const MoonPosition = fastMemo(() => {
   const arrowHeadSize = 8; // Size of the triangular head
 
   return (
-    <div style={{ paddingLeft: '0.5rem', borderLeft: '1px solid var(--semi-color-border)' }}>
+    <div
+      style={{
+        paddingLeft: '0.5rem',
+        borderLeft: '1px solid var(--semi-color-border)',
+        position: 'relative',
+      }}
+    >
       <svg
         width="160"
         height={height}
@@ -149,6 +157,16 @@ export const MoonPosition = fastMemo(() => {
           fill="green"
         />
       </svg>
+
+      <Tooltip
+        content={
+          moonData.altitude > 0
+            ? 'The moon is above the horizon.'
+            : 'The moon is below the horizon.'
+        }
+      >
+        <InfoIconForTooltip style={{ position: 'absolute', bottom: 88, left: 5 }} />
+      </Tooltip>
     </div>
   );
 });

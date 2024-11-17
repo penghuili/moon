@@ -1,9 +1,10 @@
-import { Typography } from '@douyinfe/semi-ui';
+import { Tooltip, Typography } from '@douyinfe/semi-ui';
 import React, { useMemo } from 'react';
 import fastMemo from 'react-fast-memo';
 import { useCat } from 'usecat';
 
 import { moonDataCat } from '../store/moonCats.jsx';
+import { InfoIconForTooltip } from './InfoIconForTooltip.jsx';
 
 export const MoonDirection = fastMemo(() => {
   const moonData = useCat(moonDataCat);
@@ -31,6 +32,9 @@ export const MoonDirection = fastMemo(() => {
       >
         {rounded}°
       </Typography.Text>
+      <Tooltip content="Use Google map or a compass app to find the red arrow direction, that's where you find the moon.">
+        <InfoIconForTooltip style={{ position: 'absolute', bottom: 88, right: 5 }} />
+      </Tooltip>
     </div>
   );
 });
