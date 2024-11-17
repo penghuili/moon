@@ -1,3 +1,1 @@
-# Soundice
-
-![intro](/public/intro2.gif)
+# Where is the moon?

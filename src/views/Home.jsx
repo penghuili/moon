@@ -1,5 +1,5 @@
-import { Card, Divider } from '@douyinfe/semi-ui';
-import { RiRefreshLine } from '@remixicon/react';
+import { Button, Card, Divider } from '@douyinfe/semi-ui';
+import { RiCodeLine, RiMailLine, RiRefreshLine } from '@remixicon/react';
 import React from 'react';
 import fastMemo from 'react-fast-memo';
 
@@ -11,17 +11,19 @@ import { MoonPhase } from '../components/MoonPhase.jsx';
 import { MoonPosition } from '../components/MoonPosition';
 import { Countdown, MoonRiseSet } from '../components/MoonRiseSet';
 import { PageContent } from '../shared/browser/PageContent';
+import { copyContactEmailEffect } from '../shared/browser/store/sharedEffects.js';
+import { contactEmail } from '../shared/js/constants.js';
 import { AlsoBuilt } from '../shared/semi/AlsoBuilt.jsx';
 import { Flex } from '../shared/semi/Flex.jsx';
 import { IconButton } from '../shared/semi/IconButton.jsx';
-import { updateMoonData, useMoonData, useMoonShape } from '../store/moonCats.jsx';
+import { updateMoonData, useInitMoonData, useMoonShape } from '../store/moonCats.jsx';
 
 export const Home = fastMemo(() => {
-  useMoonData();
+  useInitMoonData();
   const moonShape = useMoonShape();
 
   return (
-    <PageContent paddingBottom="0">
+    <PageContent>
       <div style={{ textAlign: 'center' }}>
         <BerlinMoon />
 
@@ -74,6 +76,17 @@ export const Home = fastMemo(() => {
       <Divider margin="1rem" />
 
       <AlsoBuilt showBeer />
+
+      <Flex align="start" gap="1rem">
+        <a href="https://github.com/penghuili/moon" target="_blank">
+          <Button icon={<RiCodeLine />} theme="outline">
+            Source code
+          </Button>
+        </a>
+        <Button theme="outline" icon={<RiMailLine />} onClick={copyContactEmailEffect}>
+          Contact: {contactEmail}
+        </Button>
+      </Flex>
     </PageContent>
   );
 });

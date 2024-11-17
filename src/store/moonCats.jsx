@@ -62,7 +62,7 @@ export function updateMoonData(hideMessage) {
   }
 }
 
-export function useMoonData() {
+export function useInitMoonData() {
   const position = useCat(positionCat);
 
   useEffect(() => {
