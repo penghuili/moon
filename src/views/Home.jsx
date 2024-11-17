@@ -5,6 +5,7 @@ import fastMemo from 'react-fast-memo';
 
 import { BerlinMoon } from '../components/BerlinMoon.jsx';
 import { GeoPermission } from '../components/GeoPermission.jsx';
+import { LiveIndicator } from '../components/LiveIndicator.jsx';
 import { MoonDirection } from '../components/MoonDirection';
 import { MoonPhase } from '../components/MoonPhase.jsx';
 import { MoonPosition } from '../components/MoonPosition';
@@ -26,6 +27,10 @@ export const Home = fastMemo(() => {
 
         {!!moonShape && (
           <>
+            <Flex direction="row" justify="center" align="center" p="1rem 0 0">
+              <LiveIndicator size={8} text="Data is updated every minute." />
+            </Flex>
+
             <Card
               title={<Card.Meta title={moonShape.message} />}
               headerExtraContent={
