@@ -31,11 +31,13 @@ export function updateMoonData(hideMessage) {
     const now = new Date();
     const moonPos = getMoonPosition(now, position.latitude, position.longitude);
     const moonIllum = getMoonIllumination(now);
-    const sunTimes = getTimes(now, position.latitude, position.longitude);
+
+    const yesterdaySunTimes = getTimes(subDays(now, 1), position.latitude, position.longitude);
+    const todaySunTimes = getTimes(now, position.latitude, position.longitude);
     const tomorrowSunTimes = getTimes(addDays(now, 1), position.latitude, position.longitude);
     const moonTimes = getMoonRiseAndSet(position);
 
-    const isNight = now >= sunTimes.night && now < sunTimes.nightEnd;
+    const isNight = now >= todaySunTimes.night && now < todaySunTimes.nightEnd;
     const isAboveHorizon = moonPos.altitude > 0;
 
     moonDataCat.set({
@@ -43,10 +45,13 @@ export function updateMoonData(hideMessage) {
       altitude: moonPos.altitude,
       phase: moonIllum.phase,
       visible: isAboveHorizon && isNight,
+
       rise: moonTimes?.rise,
       set: moonTimes?.set,
-      sunrise: sunTimes.sunrise,
-      sunset: sunTimes.sunset,
+      yesterdaySunrise: yesterdaySunTimes.sunrise,
+      yesterdaySunset: yesterdaySunTimes.sunset,
+      sunrise: todaySunTimes.sunrise,
+      sunset: todaySunTimes.sunset,
       tomorrowSunrise: tomorrowSunTimes.sunrise,
       tomorrowSunset: tomorrowSunTimes.sunset,
     });
@@ -124,67 +129,64 @@ export function useMoonTimes() {
       return [];
     }
 
-    const arr = [];
-    let hasNow = false;
-    const moonrise = { key: 'Moonrise', label: 'Moonrise', date: moonData.rise };
-    arr.push(moonrise);
-
-    if (moonData.sunrise > moonData.rise && moonData.sunrise < moonData.set) {
-      if (moonData.sunrise > new Date()) {
-        moonrise.start = true;
-        moonrise.endDate = moonData.sunrise;
-        moonrise.visible = true;
-      }
-      if (!hasNow && moonData.sunrise > new Date()) {
-        hasNow = true;
-        arr.push({ key: 'Now', label: 'Now', date: new Date(), visible: true });
-      }
-      arr.push({ key: 'Sunrise', label: 'Sunrise', date: moonData.sunrise, visible: true });
+    function isWithin(date, start, end) {
+      return date >= start && date <= end;
     }
 
-    if (moonData.sunset > moonData.rise && moonData.sunset < moonData.set) {
-      if (!hasNow && moonData.sunset > new Date()) {
-        hasNow = true;
-        arr.push({ key: 'Now', label: 'Now', date: new Date() });
-      }
-      const sunsetData = {
-        key: 'Sunset',
-        label: 'Sunset',
-        date: moonData.sunset,
-        start: true,
-        visible: true,
-      };
-      arr.push(sunsetData);
-      if (moonData.tomorrowSunrise < moonData.set) {
-        if (!hasNow && moonData.tomorrowSunrise > new Date()) {
-          hasNow = true;
-          arr.push({ key: 'Now', label: 'Now', date: new Date(), visible: true });
-        }
-        sunsetData.endDate = moonData.tomorrowSunrise;
-        arr.push({
-          key: 'SunriseTomorrow',
-          label: 'Sunrise',
-          date: moonData.tomorrowSunrise,
-          visible: true,
-        });
-        if (!hasNow && moonData.set > new Date()) {
-          hasNow = true;
-          arr.push({ key: 'Now', label: 'Now', date: new Date() });
-        }
-        arr.push({ key: 'Moonset', label: 'Moonset', date: moonData.set });
-      } else {
-        sunsetData.endDate = moonData.set;
+    const moonrise = {
+      key: 'Moonrise',
+      label: 'Moonrise',
+      date: moonData.rise,
+      visible:
+        isWithin(moonData.rise, moonData.yesterdaySunset, moonData.sunrise) ||
+        isWithin(moonData.rise, moonData.sunset, moonData.tomorrowSunrise),
+    };
+    const moonset = {
+      key: 'Moonset',
+      label: 'Moonset',
+      date: moonData.set,
+      visible:
+        isWithin(moonData.set, moonData.yesterdaySunset, moonData.sunrise) ||
+        isWithin(moonData.set, moonData.sunset, moonData.tomorrowSunrise),
+    };
+    const sunrise = {
+      key: 'Sunrise',
+      label: 'Sunrise',
+      date: moonData.sunrise,
+      visible: isWithin(moonData.sunrise, moonData.rise, moonData.set),
+    };
+    const sunset = {
+      key: 'Sunset',
+      label: 'Sunset',
+      date: moonData.sunset,
+      visible: isWithin(moonData.sunset, moonData.rise, moonData.set),
+    };
+    const tomorrowSunrise = {
+      key: 'Tomorrow Sunrise',
+      label: 'Tomorrow Sunrise',
+      date: moonData.tomorrowSunrise,
+      visible: isWithin(moonData.tomorrowSunrise, moonData.rise, moonData.set),
+    };
+    const now = {
+      key: 'Now',
+      label: 'Now',
+      date: new Date(),
+      visible: isWithin(new Date(), moonData.rise, moonData.set) && new Date() >= moonData.sunset,
+    };
 
-        if (!hasNow && moonData.set > new Date()) {
-          hasNow = true;
-          arr.push({ key: 'Now', label: 'Now', date: new Date(), visible: true });
-        }
-        arr.push({ key: 'Moonset', label: 'Moonset', date: moonData.set, visible: true });
-      }
-    }
+    const dates = [moonrise, moonset, sunrise, sunset, tomorrowSunrise, now]
+      .filter(i => i.date >= moonrise.date && i.date <= moonset.date)
+      .sort((a, b) => a.date - b.date);
 
-    return arr;
-  }, [moonData.rise, moonData.set, moonData.sunrise, moonData.sunset, moonData.tomorrowSunrise]);
+    return dates;
+  }, [
+    moonData.rise,
+    moonData.set,
+    moonData.yesterdaySunset,
+    moonData.sunrise,
+    moonData.sunset,
+    moonData.tomorrowSunrise,
+  ]);
 }
 
 function getMoonRiseAndSet(position) {
