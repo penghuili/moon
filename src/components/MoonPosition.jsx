@@ -34,8 +34,8 @@ export const MoonPosition = fastMemo(() => {
     perpendicularAngle -= Math.PI; // Reverse direction for upward pointing
   }
   // Arrow position near the moon
-  const arrowBaseX = eyeX + moonX + 20;
-  const arrowBaseY = eyeY + moonY + 5;
+  const arrowBaseX = eyeX + (moonLineLength + 15) * Math.cos((angleInDegrees * Math.PI) / 180);
+  const arrowBaseY = eyeY - (moonLineLength + 15) * Math.sin((angleInDegrees * Math.PI) / 180);
   const arrowTipX = arrowBaseX + arrowLength * Math.cos(perpendicularAngle);
   const arrowTipY = arrowBaseY + arrowLength * Math.sin(perpendicularAngle);
   const arrowHeadSize = 8; // Size of the triangular head
