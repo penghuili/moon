@@ -57,29 +57,34 @@ const MoonRiseSetDates = fastMemo(() => {
 });
 
 export const Countdown = fastMemo(() => {
-  const data = useMoonTimes();
-  const targetDate = useMemo(() => data.find(i => i.start)?.date, [data]);
+  const moonTimes = useMoonTimes();
+
+  const data = useMemo(() => {
+    const nowData = moonTimes.find(i => i.key === 'Now' && i.visible);
+    if (nowData) {
+      return { visible: true };
+    }
+
+    const nextData = moonTimes.find(i => i.date > new Date() && i.visible);
+    return { visible: false, date: nextData?.date };
+  }, [moonTimes]);
 
   const [timeLeft, setTimeLeft] = useState(null);
 
   useEffect(() => {
-    if (!targetDate || targetDate < new Date()) {
+    if (data.visible || !data.date) {
       return;
     }
 
     const timer = setInterval(() => {
-      const timeRemaining = getTimeDifference(new Date(), targetDate);
+      const timeRemaining = getTimeDifference(new Date(), data.date);
       setTimeLeft(timeRemaining);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [targetDate]);
+  }, [data]);
 
-  if (!targetDate) {
-    return null;
-  }
-
-  if (targetDate < new Date()) {
+  if (data.visible) {
     return (
       <>
         <Typography.Title heading={5}>Moon is visible!</Typography.Title>
