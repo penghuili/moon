@@ -1,4 +1,4 @@
-import { addDays, subDays } from 'date-fns';
+import { addDays, addMinutes, endOfDay, startOfDay, subDays } from 'date-fns';
 import { useEffect, useMemo } from 'react';
 import { getMoonIllumination, getMoonPosition, getMoonTimes, getTimes } from 'suncalc';
 import { createCat, useCat } from 'usecat';
@@ -37,14 +37,14 @@ export function updateMoonData(hideMessage) {
     const tomorrowSunTimes = getTimes(addDays(now, 1), position.latitude, position.longitude);
     const moonTimes = getMoonRiseAndSet(position);
 
-    const isNight = now >= todaySunTimes.night && now < todaySunTimes.nightEnd;
-    const isAboveHorizon = moonPos.altitude > 0;
+    const in10minPos = getMoonPosition(addMinutes(now, 10), position.latitude, position.longitude);
+    const rising = in10minPos.altitude > moonPos.altitude;
 
     moonDataCat.set({
       azimuth: moonPos.azimuth,
       altitude: moonPos.altitude,
       phase: moonIllum.phase,
-      visible: isAboveHorizon && isNight,
+      rising,
 
       rise: moonTimes?.rise,
       set: moonTimes?.set,
@@ -163,7 +163,7 @@ export function useMoonTimes() {
     };
     const tomorrowSunrise = {
       key: 'Tomorrow Sunrise',
-      label: 'Tomorrow Sunrise',
+      label: ' Sunrise',
       date: moonData.tomorrowSunrise,
       visible: isWithin(moonData.tomorrowSunrise, moonData.rise, moonData.set),
     };
@@ -175,7 +175,11 @@ export function useMoonTimes() {
     };
 
     const dates = [moonrise, moonset, sunrise, sunset, tomorrowSunrise, now]
-      .filter(i => i.date >= moonrise.date && i.date <= moonset.date)
+      .filter(
+        i =>
+          i.date >= Math.min(moonrise.date, startOfDay(new Date())) &&
+          i.date <= Math.max(moonset.date, endOfDay(new Date()))
+      )
       .sort((a, b) => a.date - b.date);
 
     return dates;

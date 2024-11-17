@@ -22,12 +22,26 @@ export const MoonPosition = fastMemo(() => {
   const height = Math.abs(moonY) + 80;
 
   // Person's eye position
-  const eyeX = 20; // Horizontal position of the person
+  const eyeX = 25; // Horizontal position of the person
   const eyeY = angleInDegrees < 0 ? 20 : height - 40; // Eye position slightly above the head's center
+
+  // Arrow properties
+  const arrowLength = 20; // Total length of the arrow (shaft + head)
+  // Angle perpendicular to the moon's line
+  let perpendicularAngle = Math.atan2(moonY, moonX) + Math.PI / 2;
+  // Adjust to ensure the arrow points upward relative to the perpendicular
+  if (moonData.rising) {
+    perpendicularAngle -= Math.PI; // Reverse direction for upward pointing
+  }
+  // Arrow position near the moon
+  const arrowBaseX = eyeX + moonX + 20;
+  const arrowBaseY = eyeY + moonY + 5;
+  const arrowTipX = arrowBaseX + arrowLength * Math.cos(perpendicularAngle);
+  const arrowTipY = arrowBaseY + arrowLength * Math.sin(perpendicularAngle);
+  const arrowHeadSize = 8; // Size of the triangular head
 
   return (
     <div style={{ paddingLeft: '0.5rem', borderLeft: '1px solid var(--semi-color-border)' }}>
-      {/* <h2>{moonData.altitude > 0 ? 'Above Horizon' : 'Below Horizon'} </h2> */}
       <svg
         width="160"
         height={height}
@@ -64,6 +78,28 @@ export const MoonPosition = fastMemo(() => {
         >
           <MoonPhase size={20} />
         </foreignObject>
+
+        {/* Direction Arrow */}
+        <g>
+          {/* Arrow shaft */}
+          <line
+            x1={arrowBaseX}
+            y1={arrowBaseY}
+            x2={arrowTipX}
+            y2={arrowTipY}
+            stroke="#FFC850"
+            strokeWidth="2"
+          />
+          {/* Arrowhead */}
+          <polygon
+            points={`
+              ${arrowTipX},${arrowTipY}
+              ${arrowTipX - arrowHeadSize * Math.cos(perpendicularAngle - Math.PI / 6)},${arrowTipY - arrowHeadSize * Math.sin(perpendicularAngle - Math.PI / 6)}
+              ${arrowTipX - arrowHeadSize * Math.cos(perpendicularAngle + Math.PI / 6)},${arrowTipY - arrowHeadSize * Math.sin(perpendicularAngle + Math.PI / 6)}
+            `}
+            fill="#FFC850"
+          />
+        </g>
 
         {/* Person */}
         {/* Head */}
