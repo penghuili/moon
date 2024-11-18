@@ -93,24 +93,24 @@ export function useMoonShape() {
       message = 'New moon';
     }
     if (phase >= delta && phase < 0.25 - delta) {
-      message = 'Waxing Crescent';
+      message = 'Waxing Crescent (growing)';
     }
     if (phase >= 0.25 - delta && phase < 0.25 + delta) {
-      message = 'First Quarter';
+      message = 'First Quarter (growing)';
     }
     if (phase >= 0.25 + delta && phase < 0.55 - delta) {
-      message = 'Waxing Gibbous';
+      message = 'Waxing Gibbous (growing)';
     }
     if (phase >= 0.5 - delta && phase < 0.5 + delta) {
       message = 'Full moon';
     }
     if (phase >= 0.5 + delta && phase < 0.75 - delta) {
-      message = 'Waning Gibbous';
+      message = 'Waning Gibbous (shrinking)';
     }
     if (phase >= 0.75 - delta && phase < 0.75 + delta) {
-      message = 'Last Quarter';
+      message = 'Last Quarter (shrinking)';
     } else {
-      message = 'Waning Crescent';
+      message = 'Waning Crescent (shrinking)';
     }
 
     return { message, percent: percentageOfLightPart };
