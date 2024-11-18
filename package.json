@@ -5,7 +5,7 @@
   "dependencies": {
     "@douyinfe/semi-ui": "2.68.3",
     "@remixicon/react": "4.4.0",
-    "@semi-bot/semi-theme-easyy": "1.0.5",
+    "@semi-bot/semi-theme-whereismoon": "1.0.1",
     "date-fns": "4.1.0",
     "date-fns-tz": "3.2.0",
     "file-saver": "2.0.5",

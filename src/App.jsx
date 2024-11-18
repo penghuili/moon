@@ -21,7 +21,9 @@ function App() {
       <Router />
 
       <Toast />
-      <Scrollbar thumbColor="#78c174" trackColor="#def0dc" />
+
+      {/* thumbColor: --semi-brand-2, trackColor: --semi-brand-0 */}
+      <Scrollbar thumbColor="#e6ae6c" trackColor="#fbf4ea" />
     </AppWrapper>
   );
 }

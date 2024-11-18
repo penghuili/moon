@@ -95,7 +95,7 @@ export const MoonPosition = fastMemo(() => {
             y1={arrowBaseY}
             x2={arrowTipX}
             y2={arrowTipY}
-            stroke="#FFC850"
+            stroke="var(--semi-color-primary)"
             strokeWidth="2"
           />
           {/* Arrowhead */}
@@ -105,7 +105,7 @@ export const MoonPosition = fastMemo(() => {
               ${arrowTipX - arrowHeadSize * Math.cos(perpendicularAngle - Math.PI / 6)},${arrowTipY - arrowHeadSize * Math.sin(perpendicularAngle - Math.PI / 6)}
               ${arrowTipX - arrowHeadSize * Math.cos(perpendicularAngle + Math.PI / 6)},${arrowTipY - arrowHeadSize * Math.sin(perpendicularAngle + Math.PI / 6)}
             `}
-            fill="#FFC850"
+            fill="var(--semi-color-primary)"
           />
         </g>
 

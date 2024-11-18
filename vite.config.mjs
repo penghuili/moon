@@ -12,13 +12,13 @@ export default defineConfig(({ mode }) => {
       mode === 'production'
         ? [
             SemiPlugin({
-              theme: '@semi-bot/semi-theme-easyy',
+              theme: '@semi-bot/semi-theme-whereismoon',
             }),
             timestampPlugin(env),
           ]
         : [
             SemiPlugin({
-              theme: '@semi-bot/semi-theme-easyy',
+              theme: '@semi-bot/semi-theme-whereismoon',
             }),
           ],
     resolve: {

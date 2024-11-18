@@ -2,7 +2,7 @@
   "name": "Moon",
   "short_name": "Moon",
   "background_color": "white",
-  "theme_color": "#FFC850",
+  "theme_color": "#dd9141",
   "display": "standalone",
   "start_url": "/",
   "scope": "/",
