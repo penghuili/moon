@@ -85,7 +85,7 @@ export const Home = fastMemo(() => {
       </Typography.Title>
 
       <Flex align="start" gap="1rem" m="0 0 2rem">
-        <a href="https://github.com/penghuili/moon" target="_blank">
+        <a href="https://github.com/penghuili/moonfinder" target="_blank">
           <Button icon={<RiCodeLine />} theme="outline">
             Source code
           </Button>
