@@ -76,7 +76,7 @@ export const Home = fastMemo(() => {
       <Divider margin="1rem" />
 
       <Typography.Title heading={4} style={{ textAlign: 'left' }}>
-        <Image src="/icons/icon-192.png" width={23} height={23} alt="MoonFinder" /> Moon Finder:
+        <Image src="/icons/icon-192.png" width={23} height={23} alt="MoonFinder" /> moon finder:
         Little page that helps you find the moon.
       </Typography.Title>
 
