@@ -21,9 +21,10 @@ export const MoonPhase = fastMemo(({ size = 100 }) => {
   const radius = viewBoxSize * 0.475; // Radius of the moon
   const center = viewBoxSize / 2;
 
-  // Calculate the zenith angle of the moon's bright limb
-  // Subtract parallactic angle from the illumination angle
+  // Calculate the zenith angle and adjust for SVG coordinate system
   const zenithAngle = angle - parallacticAngle;
+  // Add 90 degrees to rotate from west (SVG 0°) to north (astronomical 0°)
+  const rotationAngle = (zenithAngle * 180) / Math.PI + 90;
 
   // Create the path for the moon phase
   const pathD =
@@ -41,10 +42,9 @@ export const MoonPhase = fastMemo(({ size = 100 }) => {
       height={size}
       viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
       style={{
-        // Use zenithAngle instead of just angle for rotation
-        transform: `rotate(${(zenithAngle * 180) / Math.PI}deg)`,
+        transform: `rotate(${rotationAngle}deg)`,
         transformOrigin: 'center',
-      }} // Rotate based on angle
+      }}
     >
       {/* Moon base circle */}
       <circle
