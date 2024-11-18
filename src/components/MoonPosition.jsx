@@ -21,7 +21,7 @@ export const MoonPosition = fastMemo(() => {
   const moonX = moonLineLength * Math.cos((angleInDegrees * Math.PI) / 180);
   const moonY = -moonLineLength * Math.sin((angleInDegrees * Math.PI) / 180);
 
-  const height = Math.abs(moonY) + 80;
+  const height = Math.max(Math.abs(moonY) + 80, 110);
 
   // Person's eye position
   const eyeX = 25; // Horizontal position of the person

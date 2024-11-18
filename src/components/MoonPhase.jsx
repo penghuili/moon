@@ -7,33 +7,56 @@ import { moonDataCat } from '../store/moonCats.jsx';
 export const MoonPhase = fastMemo(({ size = 100 }) => {
   const moonData = useCat(moonDataCat);
 
-  if (!moonData?.phase === undefined) {
+  if (
+    moonData?.fraction === undefined ||
+    moonData?.angle === undefined ||
+    moonData?.parallacticAngle === undefined
+  ) {
     return null;
   }
 
-  // Ensure phase is between 0 and 1
-  const normalizedPhase = Math.max(0, Math.min(1, moonData.phase));
+  const { fraction, angle, parallacticAngle } = moonData;
 
   const viewBoxSize = 200;
-  const radius = viewBoxSize * 0.475; // 95 in original
+  const radius = viewBoxSize * 0.475; // Radius of the moon
   const center = viewBoxSize / 2;
 
-  // Calculate the x position for the clipping circle
-  const x = normalizedPhase * viewBoxSize;
+  // Calculate the zenith angle of the moon's bright limb
+  // Subtract parallactic angle from the illumination angle
+  const zenithAngle = angle - parallacticAngle;
+
+  // Create the path for the moon phase
+  const pathD =
+    fraction <= 0.5
+      ? `M ${center} ${center - radius}
+       A ${radius} ${radius} 0 1 1 ${center} ${center + radius}
+       A ${radius * (1 - 2 * fraction)} ${radius} 0 1 0 ${center} ${center - radius}`
+      : `M ${center} ${center - radius}
+       A ${radius} ${radius} 0 1 1 ${center} ${center + radius}
+       A ${radius * (2 * fraction - 1)} ${radius} 0 1 1 ${center} ${center - radius}`;
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}>
-      {/* Moon circle */}
-      <circle cx={center} cy={center} r={radius} fill="#FFC850" stroke="#000000" strokeWidth="2" />
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
+      style={{
+        // Use zenithAngle instead of just angle for rotation
+        transform: `rotate(${(zenithAngle * 180) / Math.PI}deg)`,
+        transformOrigin: 'center',
+      }} // Rotate based on angle
+    >
+      {/* Moon base circle */}
+      <circle
+        cx={center}
+        cy={center}
+        r={radius}
+        fill="#1f1f1f" // Adjusted color
+        stroke="none"
+      />
 
-      {/* Dark side of moon */}
-      <circle cx={center} cy={center} r={radius} fill="#000000" mask="url(#moonMask)" />
-
-      {/* Mask for creating the phase effect */}
-      <mask id="moonMask">
-        <rect x="0" y="0" width={viewBoxSize} height={viewBoxSize} fill="white" />
-        <circle cx={x} cy={center} r={radius} fill="black" />
-      </mask>
+      {/* Illuminated part */}
+      <path d={pathD} fill="#FFC850" stroke="none" />
     </svg>
   );
 });

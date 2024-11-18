@@ -46,6 +46,9 @@ export function updateMoonData(hideMessage) {
       azimuth: moonPos.azimuth,
       altitude: moonPos.altitude,
       phase: moonIllum.phase,
+      fraction: moonIllum.fraction,
+      angle: moonIllum.angle,
+      parallacticAngle: moonPos.parallacticAngle,
       rising,
 
       yesterdayMoonrise: yesterdayMoonTimes.rise,
