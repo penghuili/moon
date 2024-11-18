@@ -33,7 +33,7 @@ export const MoonDirection = fastMemo(() => {
         {rounded}°
       </Typography.Text>
       <Tooltip content="Use Google map or a compass app to find the red arrow direction, that's where you find the moon.">
-        <InfoIconForTooltip style={{ position: 'absolute', bottom: 88, right: 5 }} />
+        <InfoIconForTooltip style={{ position: 'absolute', bottom: 80, right: 5 }} />
       </Tooltip>
     </div>
   );

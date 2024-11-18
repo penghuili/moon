@@ -1,4 +1,4 @@
-import { addDays, addMinutes, endOfDay, startOfDay, subDays } from 'date-fns';
+import { addDays, addMinutes, subDays } from 'date-fns';
 import { useEffect, useMemo } from 'react';
 import { getMoonIllumination, getMoonPosition, getMoonTimes, getTimes } from 'suncalc';
 import { createCat, useCat } from 'usecat';
@@ -35,7 +35,9 @@ export function updateMoonData(hideMessage) {
     const yesterdaySunTimes = getTimes(subDays(now, 1), position.latitude, position.longitude);
     const todaySunTimes = getTimes(now, position.latitude, position.longitude);
     const tomorrowSunTimes = getTimes(addDays(now, 1), position.latitude, position.longitude);
-    const moonTimes = getMoonRiseAndSet(position);
+    const yesterdayMoonTimes = getMoonTimes(subDays(now, 1), position.latitude, position.longitude);
+    const todayMoonTimes = getMoonTimes(now, position.latitude, position.longitude);
+    const tomorrowMoonTimes = getMoonTimes(addDays(now, 1), position.latitude, position.longitude);
 
     const in10minPos = getMoonPosition(addMinutes(now, 10), position.latitude, position.longitude);
     const rising = in10minPos.altitude > moonPos.altitude;
@@ -46,12 +48,16 @@ export function updateMoonData(hideMessage) {
       phase: moonIllum.phase,
       rising,
 
-      rise: moonTimes?.rise,
-      set: moonTimes?.set,
+      yesterdayMoonrise: yesterdayMoonTimes.rise,
+      yesterdayMoonset: yesterdayMoonTimes.set,
+      todayMoonrise: todayMoonTimes.rise,
+      todayMoonset: todayMoonTimes.set,
+      tomorrowMoonrise: tomorrowMoonTimes.rise,
+      tomorrowMoonset: tomorrowMoonTimes.set,
       yesterdaySunrise: yesterdaySunTimes.sunrise,
       yesterdaySunset: yesterdaySunTimes.sunset,
-      sunrise: todaySunTimes.sunrise,
-      sunset: todaySunTimes.sunset,
+      todaySunrise: todaySunTimes.sunrise,
+      todaySunset: todaySunTimes.sunset,
       tomorrowSunrise: tomorrowSunTimes.sunrise,
       tomorrowSunset: tomorrowSunTimes.sunset,
     });
@@ -121,111 +127,141 @@ export function useMoonTimes() {
   const moonData = useCat(moonDataCat);
 
   return useMemo(() => {
-    if (moonData?.rise === true || moonData?.set === true) {
+    if (moonData?.todayMoonrise === true || moonData?.todayMoonset === true) {
       return [];
     }
 
-    if (!moonData?.rise || !moonData?.set) {
-      return [];
-    }
-
-    function isWithin(date, start, end) {
-      return date >= start && date <= end;
-    }
-
-    const moonrise = {
+    const yesterdayMoonrise = {
+      key: 'Yesterday Moonrise',
+      label: 'Moonrise (yesterday)',
+      date: moonData.yesterdayMoonrise,
+      visible:
+        moonData.yesterdayMoonrise > moonData.yesterdaySunset ||
+        moonData.yesterdayMoonrise < moonData.yesterdaySunrise,
+    };
+    const yesterdayMoonset = {
+      key: 'Yesterday Moonset',
+      label: 'Moonset (yesterday)',
+      date: moonData.yesterdayMoonset,
+      visible:
+        moonData.yesterdayMoonset > moonData.yesterdaySunset ||
+        moonData.yesterdayMoonset < moonData.yesterdaySunrise,
+    };
+    const todayMoonrise = {
       key: 'Moonrise',
-      label: 'Moonrise',
-      date: moonData.rise,
+      label: 'Moonrise (today)',
+      date: moonData.todayMoonrise,
       visible:
-        isWithin(moonData.rise, moonData.yesterdaySunset, moonData.sunrise) ||
-        isWithin(moonData.rise, moonData.sunset, moonData.tomorrowSunrise),
+        moonData.todayMoonrise > moonData.todaySunset ||
+        moonData.todayMoonrise < moonData.todaySunrise,
     };
-    const moonset = {
+    const todayMoonset = {
       key: 'Moonset',
-      label: 'Moonset',
-      date: moonData.set,
+      label: 'Moonset (today)',
+      date: moonData.todayMoonset,
       visible:
-        isWithin(moonData.set, moonData.yesterdaySunset, moonData.sunrise) ||
-        isWithin(moonData.set, moonData.sunset, moonData.tomorrowSunrise),
+        moonData.todayMoonset > moonData.todaySunset ||
+        moonData.todayMoonset < moonData.todaySunrise,
     };
-    const sunrise = {
-      key: 'Sunrise',
-      label: 'Sunrise',
-      date: moonData.sunrise,
-      visible: isWithin(moonData.sunrise, moonData.rise, moonData.set),
+    const tomorrowMoonrise = {
+      key: 'Tomorrow Moonrise',
+      label: 'Moonrise (tomorrow)',
+      date: moonData.tomorrowMoonrise,
+      visible:
+        moonData.tomorrowMoonrise > moonData.tomorrowSunset ||
+        moonData.tomorrowMoonrise < moonData.tomorrowSunrise,
     };
-    const sunset = {
-      key: 'Sunset',
-      label: 'Sunset',
-      date: moonData.sunset,
-      visible: isWithin(moonData.sunset, moonData.rise, moonData.set),
+    const tomorrowMoonset = {
+      key: 'Tomorrow Moonset',
+      label: 'Moonset (tomorrow)',
+      date: moonData.tomorrowMoonset,
+      visible:
+        moonData.tomorrowMoonset > moonData.tomorrowSunset ||
+        moonData.tomorrowMoonset < moonData.tomorrowSunrise,
     };
-    const tomorrowSunrise = {
+
+    const yesterdaySunrise = {
+      key: 'Yesterday Sunrise',
+      label: 'Sunrise (yesterday)',
+      date: moonData.yesterdaySunrise,
+      visible:
+        moonData.yesterdaySunrise < moonData.yesterdayMoonset ||
+        moonData.yesterdaySunrise > moonData.yesterdayMoonrise,
+    };
+    const yesterdaySunset = {
+      key: 'Yesterday Sunset',
+      label: 'Sunset (yesterday)',
+      date: moonData.yesterdaySunset,
+      visible: false,
+    };
+    const todaydaySunrise = {
+      key: 'Today Sunrise',
+      label: 'Sunrise (today)',
+      date: moonData.todaySunrise,
+      visible:
+        moonData.todaySunrise < moonData.todayMoonset ||
+        moonData.todaySunrise > moonData.todayMoonrise,
+    };
+    const todaySunset = {
+      key: 'Today Sunset',
+      label: 'Sunset (today)',
+      date: moonData.todaySunset,
+      visible: false,
+    };
+    const tomorrowdaySunrise = {
       key: 'Tomorrow Sunrise',
-      label: ' Sunrise',
+      label: 'Sunrise (tomorrow)',
       date: moonData.tomorrowSunrise,
-      visible: isWithin(moonData.tomorrowSunrise, moonData.rise, moonData.set),
+      visible:
+        moonData.tomorrowSunrise < moonData.tomorrowMoonset ||
+        moonData.tomorrowSunrise > moonData.tomorrowMoonrise,
+    };
+    const tomorrowSunset = {
+      key: 'Tomorrow Sunset',
+      label: 'Sunset (tomorrow)',
+      date: moonData.tomorrowSunset,
+      visible: false,
     };
     const now = {
       key: 'Now',
       label: 'Now',
       date: new Date(),
-      visible: isWithin(new Date(), moonData.rise, moonData.set) && new Date() >= moonData.sunset,
+      visible:
+        (new Date() < moonData.todaySunrise || new Date() > moonData.todaySunset) &&
+        (new Date() > moonData.todayMoonrise || new Date() < moonData.todayMoonset),
     };
 
-    const dates = [moonrise, moonset, sunrise, sunset, tomorrowSunrise, now]
-      .filter(
-        i =>
-          i.date >= Math.min(moonrise.date, startOfDay(new Date())) &&
-          i.date <= Math.max(moonset.date, endOfDay(new Date()))
-      )
-      .sort((a, b) => a.date - b.date);
+    const dates = [
+      yesterdayMoonrise,
+      yesterdayMoonset,
+      todayMoonrise,
+      todayMoonset,
+      tomorrowMoonrise,
+      tomorrowMoonset,
+      yesterdaySunrise,
+      yesterdaySunset,
+      todaydaySunrise,
+      todaySunset,
+      tomorrowdaySunrise,
+      tomorrowSunset,
+      now,
+    ].sort((a, b) => a.date - b.date);
 
     return dates;
   }, [
-    moonData.rise,
-    moonData.set,
+    moonData.yesterdayMoonrise,
     moonData.yesterdaySunset,
-    moonData.sunrise,
-    moonData.sunset,
+    moonData.yesterdaySunrise,
+    moonData.yesterdayMoonset,
+    moonData.todayMoonrise,
+    moonData.todaySunset,
+    moonData.todaySunrise,
+    moonData.todayMoonset,
+    moonData.tomorrowMoonrise,
+    moonData.tomorrowSunset,
     moonData.tomorrowSunrise,
+    moonData.tomorrowMoonset,
   ]);
-}
-
-function getMoonRiseAndSet(position) {
-  const now = new Date();
-  const today = getMoonTimes(now, position.latitude, position.longitude);
-
-  if (today.alwaysUp) {
-    return { rise: true, set: null };
-  }
-  if (today.alwaysDown) {
-    return { rise: null, set: true };
-  }
-
-  // Fetch moon times for yesterday, today, and tomorrow
-  const yesterday = getMoonTimes(subDays(now, 1), position.latitude, position.longitude);
-  const tomorrow = getMoonTimes(addDays(now, 1), position.latitude, position.longitude);
-
-  // Case 1: Normal case (rise and set both valid today, rise < set)
-  if (today.rise && today.set && today.rise < today.set) {
-    if (today.set > now) return { rise: today.rise, set: today.set };
-    if (today.rise > now) return { rise: today.rise, set: tomorrow.set };
-  }
-
-  // Case 2: If the moon hasn't set yet, use yesterday's rise and today's set
-  if (today.set && today.set > now) {
-    return { rise: yesterday.rise, set: today.set };
-  }
-
-  // Case 3: Today's rise is for the next cycle (rise > set)
-  if (today.set && today.set < now) {
-    return { rise: today.rise, set: tomorrow.set };
-  }
-
-  // Case 4: If no valid set today, use tomorrow's rise and set
-  return null;
 }
 
 export function getTimeDifference(date1, date2) {

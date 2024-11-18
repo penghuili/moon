@@ -11,14 +11,10 @@ import styles from './MoonRiseSet.module.css';
 export const MoonRiseSet = fastMemo(() => {
   const moonData = useCat(moonDataCat);
 
-  if (!moonData?.rise && !moonData?.set) {
-    return null;
-  }
-
-  if (moonData?.rise === true) {
+  if (moonData?.todayMoonrise === true) {
     return <p style={{ margin: '2rem 0 0' }}>Moon is visible all night.</p>;
   }
-  if (moonData?.set === true) {
+  if (moonData?.todayMoonset === true) {
     return <p style={{ margin: '2rem 0 0' }}>Moon is not visible all day.</p>;
   }
 

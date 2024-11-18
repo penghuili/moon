@@ -165,7 +165,7 @@ export const MoonPosition = fastMemo(() => {
             : 'The moon is below the horizon.'
         }
       >
-        <InfoIconForTooltip style={{ position: 'absolute', bottom: 88, left: 5 }} />
+        <InfoIconForTooltip style={{ position: 'absolute', bottom: 80, left: 5 }} />
       </Tooltip>
     </div>
   );
