@@ -5,7 +5,12 @@ import { useCat } from 'usecat';
 
 import { formatDateTime } from '../shared/js/date.js';
 import { Flex } from '../shared/semi/Flex';
-import { getTimeDifference, moonDataCat, useMoonTimes } from '../store/moonCats.jsx';
+import {
+  getTimeDifference,
+  moonDataCat,
+  updateMoonData,
+  useMoonTimes,
+} from '../store/moonCats.jsx';
 import styles from './MoonRiseSet.module.css';
 
 export const MoonRiseSet = fastMemo(() => {
@@ -39,7 +44,7 @@ const MoonRiseSetDates = fastMemo(() => {
             key={i.key}
             time={formatDateTime(i.date)}
             style={{
-              backgroundColor: i.visible ? 'var(--semi-color-warning-light-active)' : undefined,
+              backgroundColor: i.visible ? 'rgb(var(--semi-brand-2))' : undefined,
             }}
           >
             <Typography.Text className={i.key === 'Now' ? styles.glowingText : ''}>
@@ -75,6 +80,10 @@ export const Countdown = fastMemo(() => {
     const timer = setInterval(() => {
       const timeRemaining = getTimeDifference(new Date(), data.date);
       setTimeLeft(timeRemaining);
+      if (timeRemaining === '00') {
+        clearInterval(timer);
+        updateMoonData();
+      }
     }, 1000);
 
     return () => clearInterval(timer);

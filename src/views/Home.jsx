@@ -1,5 +1,5 @@
-import { Button, Card, Divider } from '@douyinfe/semi-ui';
-import { RiCodeLine, RiMailLine, RiRefreshLine } from '@remixicon/react';
+import { Button, Card, Divider, Image, Typography } from '@douyinfe/semi-ui';
+import { RiBeerLine, RiCodeLine, RiMailLine, RiRefreshLine } from '@remixicon/react';
 import React from 'react';
 import fastMemo from 'react-fast-memo';
 
@@ -75,7 +75,16 @@ export const Home = fastMemo(() => {
 
       <Divider margin="1rem" />
 
-      <AlsoBuilt showBeer />
+      <Typography.Title heading={4} style={{ textAlign: 'left' }}>
+        <Image src="/icons/icon-192.png" width={23} height={23} alt="MoonFinder" /> MoonFinder:
+        Little page that helps you find the moon.
+      </Typography.Title>
+
+      <Typography.Title heading={5} style={{ textAlign: 'left', margin: '1rem 0 2rem' }}>
+        Free, open source, no data is collected.
+      </Typography.Title>
+
+      <AlsoBuilt />
 
       <Flex align="start" gap="1rem">
         <a href="https://github.com/penghuili/moon" target="_blank">
@@ -86,6 +95,11 @@ export const Home = fastMemo(() => {
         <Button theme="outline" icon={<RiMailLine />} onClick={copyContactEmailEffect}>
           Contact: {contactEmail}
         </Button>
+        <a href="https://buy.stripe.com/14k3fYcz633kb2oeV1" target="_blank">
+          <Button theme="outline" icon={<RiBeerLine />}>
+            Buy me a beer
+          </Button>
+        </a>
       </Flex>
     </PageContent>
   );
