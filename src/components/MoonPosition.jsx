@@ -161,8 +161,8 @@ export const MoonPosition = fastMemo(() => {
       <Tooltip
         content={
           moonData.altitude > 0
-            ? 'The moon is above the horizon.'
-            : 'The moon is below the horizon.'
+            ? 'The moon is above the horizon, you can see it.'
+            : 'The moon is below the horizon, you cannot see it.'
         }
       >
         <InfoIconForTooltip style={{ position: 'absolute', bottom: 80, left: 5 }} />
