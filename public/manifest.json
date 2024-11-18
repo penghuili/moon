@@ -1,6 +1,6 @@
 {
-  "name": "Moon",
-  "short_name": "Moon",
+  "name": "MoonFinder",
+  "short_name": "MoonFinder",
   "background_color": "white",
   "theme_color": "#dd9141",
   "display": "standalone",

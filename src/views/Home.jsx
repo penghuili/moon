@@ -76,7 +76,7 @@ export const Home = fastMemo(() => {
       <Divider margin="1rem" />
 
       <Typography.Title heading={4} style={{ textAlign: 'left' }}>
-        <Image src="/icons/icon-192.png" width={23} height={23} alt="MoonFinder" /> MoonFinder:
+        <Image src="/icons/icon-192.png" width={23} height={23} alt="MoonFinder" /> Moon Finder:
         Little page that helps you find the moon.
       </Typography.Title>
 
@@ -84,9 +84,7 @@ export const Home = fastMemo(() => {
         Free, open source, no data is collected.
       </Typography.Title>
 
-      <AlsoBuilt />
-
-      <Flex align="start" gap="1rem">
+      <Flex align="start" gap="1rem" m="0 0 2rem">
         <a href="https://github.com/penghuili/moon" target="_blank">
           <Button icon={<RiCodeLine />} theme="outline">
             Source code
@@ -101,6 +99,8 @@ export const Home = fastMemo(() => {
           </Button>
         </a>
       </Flex>
+
+      <AlsoBuilt />
     </PageContent>
   );
 });
