@@ -41,9 +41,8 @@ export const MoonDirection = fastMemo(() => {
       <Typography.Text
         style={{
           position: 'absolute',
-          bottom: -6,
-          right: rounded > 99 ? -12 : -8,
-          transform: 'translate(-50%, -50%)',
+          bottom: 8,
+          right: 4,
         }}
       >
         {rounded}°

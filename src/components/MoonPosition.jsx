@@ -1,4 +1,4 @@
-import { Tooltip } from '@douyinfe/semi-ui';
+import { Tooltip, Typography } from '@douyinfe/semi-ui';
 import React from 'react';
 import fastMemo from 'react-fast-memo';
 import { useCat } from 'usecat';
@@ -35,7 +35,7 @@ export const MoonPosition = fastMemo(() => {
   const height = Math.max(Math.abs(moonY) + 80, 110);
 
   // Person's eye position
-  const eyeX = 25; // Horizontal position of the person
+  const eyeX = 40; // Horizontal position of the person
   const eyeY = angleInDegrees < 0 ? 20 : height - 40; // Eye position slightly above the head's center
 
   // Arrow properties
@@ -172,6 +172,16 @@ export const MoonPosition = fastMemo(() => {
       <Tooltip content={getTooltipContent()}>
         <InfoIconForTooltip style={{ position: 'absolute', bottom: 80, left: 5 }} />
       </Tooltip>
+
+      <Typography.Text
+        style={{
+          position: 'absolute',
+          bottom: 8,
+          left: 4,
+        }}
+      >
+        {Math.round(angleInDegrees)}°
+      </Typography.Text>
     </div>
   );
 });
