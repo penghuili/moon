@@ -19,6 +19,22 @@ export const MoonDirection = fastMemo(() => {
   }, [moonData.azimuth]);
 
   const rounded = Math.round(moonDirection);
+
+  function getTooltipContent() {
+    const baseMessage =
+      "Use Google map or a compass app to find the red arrow direction, that's where you find the moon.";
+
+    if (moonData.altitude > 0) {
+      if (new Date() > moonData.todaySunset || new Date() < moonData.todaySunrise) {
+        return baseMessage;
+      }
+
+      return `${baseMessage} (You can't see it now though, it's daytime.)`;
+    }
+
+    return `${baseMessage} (You can't see it now though, it's below the horizon.)`;
+  }
+
   return (
     <div style={{ padding: '0 1.5rem 0.5rem 0', position: 'relative' }}>
       <Cross degree={moonDirection} />
@@ -32,7 +48,7 @@ export const MoonDirection = fastMemo(() => {
       >
         {rounded}°
       </Typography.Text>
-      <Tooltip content="Use Google map or a compass app to find the red arrow direction, that's where you find the moon.">
+      <Tooltip content={getTooltipContent()}>
         <InfoIconForTooltip style={{ position: 'absolute', bottom: 80, right: 5 }} />
       </Tooltip>
     </div>

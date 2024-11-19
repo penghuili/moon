@@ -10,6 +10,17 @@ import { MoonPhase } from './MoonPhase.jsx';
 export const MoonPosition = fastMemo(() => {
   const moonData = useCat(moonDataCat);
 
+  function getTooltipContent() {
+    if (moonData.altitude > 0) {
+      if (new Date() > moonData.todaySunset || new Date() < moonData.todaySunrise) {
+        return 'The moon is above the horizon, you can see it.';
+      }
+      return "The moon is above the horizon. (You can't see it now though, it's daytime.)";
+    }
+
+    return 'The moon is below the horizon, you cannot see it.';
+  }
+
   const horizonLength = 150; // Total length of the horizontal line
   const angleInDegrees = (moonData.altitude * 180) / Math.PI; // Convert radians to degrees
   // const angleInDegrees = -45;
@@ -158,13 +169,7 @@ export const MoonPosition = fastMemo(() => {
         />
       </svg>
 
-      <Tooltip
-        content={
-          moonData.altitude > 0
-            ? 'The moon is above the horizon, you can see it.'
-            : 'The moon is below the horizon, you cannot see it.'
-        }
-      >
+      <Tooltip content={getTooltipContent()}>
         <InfoIconForTooltip style={{ position: 'absolute', bottom: 80, left: 5 }} />
       </Tooltip>
     </div>
