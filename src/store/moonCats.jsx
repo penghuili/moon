@@ -248,7 +248,9 @@ export function useMoonTimes() {
       tomorrowdaySunrise,
       tomorrowSunset,
       now,
-    ].sort((a, b) => a.date - b.date);
+    ]
+      .filter(d => d.date instanceof Date)
+      .sort((a, b) => a.date - b.date);
 
     return dates;
   }, [
