@@ -118,8 +118,12 @@ export function useMoonShape() {
     }
     if (phase >= 0.75 - delta && phase < 0.75 + delta) {
       message = 'Last Quarter (shrinking)';
-    } else {
+    }
+    if (phase >= 0.75 + delta && phase < 1 - delta) {
       message = 'Waning Crescent (shrinking)';
+    }
+    if (phase >= 1 - delta) {
+      message = 'New moon';
     }
 
     return { message, percent: percentageOfLightPart };
