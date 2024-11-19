@@ -10,6 +10,7 @@ import { MoonDirection } from '../components/MoonDirection';
 import { MoonPhase } from '../components/MoonPhase.jsx';
 import { MoonPosition } from '../components/MoonPosition';
 import { Countdown, MoonRiseSet } from '../components/MoonRiseSet';
+import { ProductHunt } from '../components/ProductHunt.jsx';
 import { PageContent } from '../shared/browser/PageContent';
 import { copyContactEmailEffect } from '../shared/browser/store/sharedEffects.js';
 import { contactEmail } from '../shared/js/constants.js';
@@ -74,6 +75,8 @@ export const Home = fastMemo(() => {
       </div>
 
       <Divider margin="1rem" />
+
+      <ProductHunt />
 
       <Typography.Title heading={4} style={{ textAlign: 'left' }}>
         <Image src="/icons/icon-192.png" width={23} height={23} alt="MoonFinder" /> moon finder:
