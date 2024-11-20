@@ -77,11 +77,11 @@ export const Home = fastMemo(() => {
 
       <Typography.Title heading={4} style={{ textAlign: 'left' }}>
         <Image src="/icons/icon-192.png" width={23} height={23} alt="MoonFinder" /> moon finder:
-        Little page that helps you find the moon.
+        little page that helps you find the moon.
       </Typography.Title>
 
       <Typography.Title heading={5} style={{ textAlign: 'left', margin: '1rem 0 2rem' }}>
-        Free, open source, no data is collected.
+        Free, open source, no data is collected, everything happens in your browser.
       </Typography.Title>
 
       <Flex align="start" gap="1rem" m="0 0 2rem">
