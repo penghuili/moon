@@ -74,6 +74,15 @@ export const GeoPermission = fastMemo(() => {
             Location permission is denied. Please enable it in your browser settings.
           </Typography.Text>
         )}
+
+        <Typography.Title
+          heading={5}
+          style={{
+            marginTop: '2rem',
+          }}
+        >
+          Moon in Berlin
+        </Typography.Title>
       </Flex>
     );
   }

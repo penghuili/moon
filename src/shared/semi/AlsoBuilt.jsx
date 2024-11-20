@@ -78,7 +78,7 @@ export function AlsoBuilt({ showBeer }) {
             }
             theme="outline"
           >
-            Soundice (Free)
+            Soundice
           </Button>
         </a>
       )}
@@ -96,7 +96,7 @@ export function AlsoBuilt({ showBeer }) {
             }
             theme="outline"
           >
-            moon finder (Free)
+            moon finder
           </Button>
         </a>
       )}

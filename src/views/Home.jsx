@@ -3,7 +3,6 @@ import { RiBeerLine, RiCodeLine, RiMailLine, RiRefreshLine } from '@remixicon/re
 import React from 'react';
 import fastMemo from 'react-fast-memo';
 
-import { BerlinMoon } from '../components/BerlinMoon.jsx';
 import { GeoPermission } from '../components/GeoPermission.jsx';
 import { LiveIndicator } from '../components/LiveIndicator.jsx';
 import { MoonDirection } from '../components/MoonDirection';
@@ -25,12 +24,12 @@ export const Home = fastMemo(() => {
 
   return (
     <PageContent>
-      <div style={{ textAlign: 'center' }}>
-        <BerlinMoon />
+      <div style={{ textAlign: 'center', margin: '1rem 0 0' }}>
+        <GeoPermission />
 
         {!!moonShape && (
           <>
-            <Flex direction="row" justify="center" align="center" p="1rem 0 0">
+            <Flex direction="row" justify="center" align="center" p="0">
               <LiveIndicator size={8} text="Data is updated every minute." />
             </Flex>
 
@@ -66,8 +65,6 @@ export const Home = fastMemo(() => {
                 <Countdown />
               </div>
             </Card>
-
-            <GeoPermission />
 
             <MoonRiseSet />
           </>
