@@ -91,7 +91,7 @@ export const Home = fastMemo(() => {
           </Button>
         </a>
         <Button theme="outline" icon={<RiMailLine />} onClick={copyContactEmailEffect}>
-          Contact: {contactEmail}
+          Feedback: {contactEmail}
         </Button>
         <a href="https://buy.stripe.com/14k3fYcz633kb2oeV1" target="_blank">
           <Button theme="outline" icon={<RiBeerLine />}>
