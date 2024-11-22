@@ -23,8 +23,7 @@ export const MoonPhase = fastMemo(({ size = 100 }) => {
 
   // Calculate the zenith angle and adjust for SVG coordinate system
   const zenithAngle = angle - parallacticAngle;
-  // Add 90 degrees to rotate from west (SVG 0°) to north (astronomical 0°)
-  const rotationAngle = (zenithAngle * 180) / Math.PI + 90;
+  const rotationAngle = (zenithAngle * 180) / Math.PI;
 
   // Create the path for the moon phase
   const pathD =
