@@ -235,7 +235,8 @@ export function useMoonTimes() {
       date: new Date(),
       visible:
         (new Date() < moonData.todaySunrise || new Date() > moonData.todaySunset) &&
-        (new Date() > moonData.todayMoonrise || new Date() < moonData.todayMoonset),
+        new Date() > moonData.todayMoonrise &&
+        new Date() < moonData.todayMoonset,
     };
 
     const dates = [
