@@ -39,17 +39,23 @@ const MoonRiseSetDates = fastMemo(() => {
       style={{ textAlign: 'left', width: '100%', maxWidth: 400, margin: '2rem auto 0' }}
     >
       <Timeline>
-        {data.map(i => (
+        {data.map((i, index) => (
           <Timeline.Item
             key={i.key}
             time={formatDateTime(i.date)}
             style={{
               backgroundColor: i.visible ? 'rgb(var(--semi-brand-2))' : undefined,
+              position: 'relative',
             }}
           >
             <Typography.Text className={i.key === 'Now' ? styles.glowingText : ''}>
               {i.label}
             </Typography.Text>
+            {i.visible && data[index + 1]?.visible && (
+              <Typography.Text type="success" style={{ position: 'absolute', right: 8, top: 8 }}>
+                Visible for {getTimeDifference(i.date, data[index + 1].date)}
+              </Typography.Text>
+            )}
           </Timeline.Item>
         ))}
       </Timeline>
