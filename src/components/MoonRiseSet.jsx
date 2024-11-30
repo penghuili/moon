@@ -39,25 +39,37 @@ const MoonRiseSetDates = fastMemo(() => {
       style={{ textAlign: 'left', width: '100%', maxWidth: 400, margin: '2rem auto 0' }}
     >
       <Timeline>
-        {data.map((i, index) => (
-          <Timeline.Item
-            key={i.key}
-            time={formatDateTime(i.date)}
-            style={{
-              backgroundColor: i.visible ? 'rgb(var(--semi-brand-2))' : undefined,
-              position: 'relative',
-            }}
-          >
-            <Typography.Text className={i.key === 'Now' ? styles.glowingText : ''}>
-              {i.label}
-            </Typography.Text>
-            {i.visible && data[index + 1]?.visible && (
-              <Typography.Text type="success" style={{ position: 'absolute', right: 8, top: 8 }}>
-                Visible for {getTimeDifference(i.date, data[index + 1].date)}
+        {data.map((i, index) => {
+          let duration = null;
+          if (i.visible && !data[index - 1]?.visible) {
+            if (data[index + 1] && !data[index + 1].visible) {
+              duration = getTimeDifference(i.date, data[index + 1].date);
+            } else if (data[index + 2] && !data[index + 2].visible) {
+              duration = getTimeDifference(i.date, data[index + 2].date);
+            } else if (data[index + 3] && !data[index + 3].visible) {
+              duration = getTimeDifference(i.date, data[index + 3].date);
+            }
+          }
+          return (
+            <Timeline.Item
+              key={i.key}
+              time={formatDateTime(i.date)}
+              style={{
+                backgroundColor: i.visible ? 'rgb(var(--semi-brand-2))' : undefined,
+                position: 'relative',
+              }}
+            >
+              <Typography.Text className={i.key === 'Now' ? styles.glowingText : ''}>
+                {i.label}
               </Typography.Text>
-            )}
-          </Timeline.Item>
-        ))}
+              {!!duration && (
+                <Typography.Text type="success" style={{ position: 'absolute', right: 8, top: 8 }}>
+                  Visible for {duration}
+                </Typography.Text>
+              )}
+            </Timeline.Item>
+          );
+        })}
       </Timeline>
     </Flex>
   );
@@ -105,7 +117,7 @@ export const Countdown = fastMemo(() => {
   }
 
   if (!timeLeft) {
-    return null;
+    return <Typography.Title heading={5}>Moon is not visible</Typography.Title>;
   }
 
   return (

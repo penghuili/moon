@@ -191,9 +191,7 @@ export function useMoonTimes() {
       key: 'Yesterday Sunrise',
       label: 'Sunrise (yesterday)',
       date: moonData.yesterdaySunrise,
-      visible:
-        moonData.yesterdaySunrise < moonData.yesterdayMoonset ||
-        moonData.yesterdaySunrise > moonData.yesterdayMoonrise,
+      visible: false,
     };
     const yesterdaySunset = {
       key: 'Yesterday Sunset',
@@ -205,9 +203,7 @@ export function useMoonTimes() {
       key: 'Today Sunrise',
       label: 'Sunrise (today)',
       date: moonData.todaySunrise,
-      visible:
-        moonData.todaySunrise < moonData.todayMoonset ||
-        moonData.todaySunrise > moonData.todayMoonrise,
+      visible: false,
     };
     const todaySunset = {
       key: 'Today Sunset',
@@ -219,9 +215,7 @@ export function useMoonTimes() {
       key: 'Tomorrow Sunrise',
       label: 'Sunrise (tomorrow)',
       date: moonData.tomorrowSunrise,
-      visible:
-        moonData.tomorrowSunrise < moonData.tomorrowMoonset ||
-        moonData.tomorrowSunrise > moonData.tomorrowMoonrise,
+      visible: false,
     };
     const tomorrowSunset = {
       key: 'Tomorrow Sunset',
