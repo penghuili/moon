@@ -3,6 +3,7 @@ import { RiBeerLine, RiCodeLine, RiMailLine, RiRefreshLine } from '@remixicon/re
 import React from 'react';
 import fastMemo from 'react-fast-memo';
 
+import { CurrentTime } from '../components/CurrentTime.jsx';
 import { GeoPermission } from '../components/GeoPermission.jsx';
 import { LiveIndicator } from '../components/LiveIndicator.jsx';
 import { MoonDirection } from '../components/MoonDirection';
@@ -34,16 +35,18 @@ export const Home = fastMemo(() => {
             </Flex>
 
             <Card
-              title={<Card.Meta title={moonShape.message} />}
+              title={<Card.Meta title={moonShape.message} style={{ padding: '1rem 0 0' }} />}
               headerExtraContent={
                 <IconButton
                   theme="borderless"
                   icon={<RiRefreshLine />}
                   onClick={() => updateMoonData()}
+                  style={{ marginTop: '1rem' }}
                 />
               }
               cover={
                 <div>
+                  <CurrentTime />
                   <div style={{ padding: '1rem 0' }}>
                     <MoonPhase />
                   </div>
