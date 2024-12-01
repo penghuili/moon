@@ -1,6 +1,6 @@
 import { addDays, addMinutes, subDays } from 'date-fns';
 import { useEffect, useMemo } from 'react';
-import { getMoonIllumination, getMoonPosition, getMoonTimes, getTimes } from 'suncalc';
+import { getMoonIllumination, getMoonPosition, getMoonTimes, getPosition, getTimes } from 'suncalc';
 import { createCat, useCat } from 'usecat';
 
 import { setToastEffect } from '../shared/browser/store/sharedEffects';
@@ -142,49 +142,37 @@ export function useMoonTimes() {
       key: 'Yesterday Moonrise',
       label: 'Moonrise (yesterday)',
       date: moonData.yesterdayMoonrise,
-      visible:
-        moonData.yesterdayMoonrise > moonData.yesterdaySunset ||
-        moonData.yesterdayMoonrise < moonData.yesterdaySunrise,
+      visible: getAngles(moonData.yesterdayMoonrise)?.sun < 0,
     };
     const yesterdayMoonset = {
       key: 'Yesterday Moonset',
       label: 'Moonset (yesterday)',
       date: moonData.yesterdayMoonset,
-      visible:
-        moonData.yesterdayMoonset > moonData.yesterdaySunset ||
-        moonData.yesterdayMoonset < moonData.yesterdaySunrise,
+      visible: false,
     };
     const todayMoonrise = {
       key: 'Moonrise',
       label: 'Moonrise (today)',
       date: moonData.todayMoonrise,
-      visible:
-        moonData.todayMoonrise > moonData.todaySunset ||
-        moonData.todayMoonrise < moonData.todaySunrise,
+      visible: getAngles(moonData.todayMoonrise)?.sun < 0,
     };
     const todayMoonset = {
       key: 'Moonset',
       label: 'Moonset (today)',
       date: moonData.todayMoonset,
-      visible:
-        moonData.todayMoonset > moonData.todaySunset ||
-        moonData.todayMoonset < moonData.todaySunrise,
+      visible: false,
     };
     const tomorrowMoonrise = {
       key: 'Tomorrow Moonrise',
       label: 'Moonrise (tomorrow)',
       date: moonData.tomorrowMoonrise,
-      visible:
-        moonData.tomorrowMoonrise > moonData.tomorrowSunset ||
-        moonData.tomorrowMoonrise < moonData.tomorrowSunrise,
+      visible: getAngles(moonData.todayMoonrise)?.sun < 0,
     };
     const tomorrowMoonset = {
       key: 'Tomorrow Moonset',
       label: 'Moonset (tomorrow)',
       date: moonData.tomorrowMoonset,
-      visible:
-        moonData.tomorrowMoonset > moonData.tomorrowSunset ||
-        moonData.tomorrowMoonset < moonData.tomorrowSunrise,
+      visible: false,
     };
 
     const yesterdaySunrise = {
@@ -197,7 +185,7 @@ export function useMoonTimes() {
       key: 'Yesterday Sunset',
       label: 'Sunset (yesterday)',
       date: moonData.yesterdaySunset,
-      visible: false,
+      visible: getAngles(moonData.yesterdaySunset)?.moon > 0,
     };
     const todaydaySunrise = {
       key: 'Today Sunrise',
@@ -209,7 +197,7 @@ export function useMoonTimes() {
       key: 'Today Sunset',
       label: 'Sunset (today)',
       date: moonData.todaySunset,
-      visible: false,
+      visible: getAngles(moonData.todaySunset)?.moon > 0,
     };
     const tomorrowdaySunrise = {
       key: 'Tomorrow Sunrise',
@@ -221,7 +209,7 @@ export function useMoonTimes() {
       key: 'Tomorrow Sunset',
       label: 'Sunset (tomorrow)',
       date: moonData.tomorrowSunset,
-      visible: false,
+      visible: getAngles(moonData.tomorrowSunset)?.moon > 0,
     };
     const now = {
       key: 'Now',
@@ -282,4 +270,15 @@ export function getTimeDifference(date1, date2) {
   const secondsString = `${add0(seconds)}`;
 
   return `${hoursString}${minutesString}${secondsString}`.trim();
+}
+
+function getAngles(date) {
+  if (!(date instanceof Date)) {
+    return null;
+  }
+  const position = positionCat.get();
+  const sunPosition = getPosition(date, position.latitude, position.longitude);
+  const moonPosition = getMoonPosition(date, position.latitude, position.longitude);
+
+  return { moon: moonPosition.altitude, sun: sunPosition.altitude };
 }
