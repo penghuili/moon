@@ -4,6 +4,7 @@ import React from 'react';
 import fastMemo from 'react-fast-memo';
 
 import { CurrentTime } from '../components/CurrentTime.jsx';
+import { DownloadMoon } from '../components/DownloadMoon.jsx';
 import { GeoPermission } from '../components/GeoPermission.jsx';
 import { LiveIndicator } from '../components/LiveIndicator.jsx';
 import { MoonDirection } from '../components/MoonDirection';
@@ -34,40 +35,45 @@ export const Home = fastMemo(() => {
               <LiveIndicator size={8} text="Data is updated every minute." />
             </Flex>
 
-            <Card
-              title={<Card.Meta title={moonShape.message} style={{ padding: '1rem 0 0' }} />}
-              headerExtraContent={
-                <IconButton
-                  theme="borderless"
-                  icon={<RiRefreshLine />}
-                  onClick={() => updateMoonData()}
-                  style={{ marginTop: '1rem' }}
-                />
-              }
-              cover={
-                <div>
-                  <CurrentTime />
-                  <div style={{ padding: '1rem 0' }}>
-                    <MoonPhase />
+            <Flex direction="row" justify="center">
+              <Card
+                id="moon-card"
+                title={<Card.Meta title={moonShape.message} style={{ padding: '1rem 0 0' }} />}
+                headerExtraContent={
+                  <IconButton
+                    id="refresh-moon"
+                    theme="borderless"
+                    icon={<RiRefreshLine />}
+                    onClick={() => updateMoonData()}
+                    style={{ marginTop: '1rem' }}
+                  />
+                }
+                cover={
+                  <div>
+                    <CurrentTime />
+                    <DownloadMoon />
+                    <div style={{ padding: '1rem 0' }}>
+                      <MoonPhase />
+                    </div>
+                    <Divider />
                   </div>
-                  <Divider />
+                }
+                shadows="always"
+                style={{ width: '100%', maxWidth: 500, position: 'relative' }}
+                bodyStyle={{ padding: 0 }}
+              >
+                <Flex direction="row" justify="center" align="end" p="0 1rem 0 0">
+                  <MoonDirection />
+                  <MoonPosition />
+                </Flex>
+
+                <Divider />
+
+                <div style={{ padding: '1rem 0' }}>
+                  <Countdown />
                 </div>
-              }
-              shadows="always"
-              style={{ width: '100%', maxWidth: 500, margin: '1rem auto 0' }}
-              bodyStyle={{ padding: 0 }}
-            >
-              <Flex direction="row" justify="center" align="end" p="0 1rem 0 0">
-                <MoonDirection />
-                <MoonPosition />
-              </Flex>
-
-              <Divider />
-
-              <div style={{ padding: '1rem 0' }}>
-                <Countdown />
-              </div>
-            </Card>
+              </Card>
+            </Flex>
 
             <MoonRiseSet />
           </>
