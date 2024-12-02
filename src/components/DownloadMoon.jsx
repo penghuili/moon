@@ -16,13 +16,24 @@ export const DownloadMoon = fastMemo(() => {
       onClick={() => {
         const cardDom = document.getElementById('moon-card');
         if (cardDom) {
-          domtoimage
-            .toBlob(cardDom, {
-              filter: node => !['refresh-moon', 'download-moon'].includes(node.id),
-            })
-            .then(blob => {
-              saveAs(blob, `moon-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.png`);
-            });
+          // Set up options for scaling
+          const scale = 3; // Scale factor (2x the original size)
+
+          const options = {
+            filter: node => !['refresh-moon', 'download-moon'].includes(node.id),
+            width: cardDom.offsetWidth * scale, // Adjust width
+            height: cardDom.offsetHeight * scale, // Adjust height
+            style: {
+              transform: `scale(${scale})`,
+              transformOrigin: 'top left',
+              width: `${cardDom.offsetWidth}px`, // Keep original width for rendering
+              height: `${cardDom.offsetHeight}px`, // Keep original height for rendering
+            },
+          };
+
+          domtoimage.toBlob(cardDom, options).then(blob => {
+            saveAs(blob, `moon-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.png`);
+          });
         }
       }}
       style={{
