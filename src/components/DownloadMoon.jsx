@@ -1,4 +1,5 @@
 import { RiDownloadLine } from '@remixicon/react';
+import { format } from 'date-fns';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
 import React from 'react';
@@ -20,7 +21,7 @@ export const DownloadMoon = fastMemo(() => {
               filter: node => !['refresh-moon', 'download-moon'].includes(node.id),
             })
             .then(blob => {
-              saveAs(blob, 'moon.png');
+              saveAs(blob, `moon-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.png`);
             });
         }
       }}

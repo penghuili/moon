@@ -35,9 +35,8 @@ export const Home = fastMemo(() => {
               <LiveIndicator size={8} text="Data is updated every minute." />
             </Flex>
 
-            <Flex direction="row" justify="center">
+            <Flex id="moon-card" direction="row" justify="center">
               <Card
-                id="moon-card"
                 title={<Card.Meta title={moonShape.message} style={{ padding: '1rem 0 0' }} />}
                 headerExtraContent={
                   <IconButton
