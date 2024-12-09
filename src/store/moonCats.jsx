@@ -211,14 +211,12 @@ export function useMoonTimes() {
       date: moonData.tomorrowSunset,
       visible: getAngles(moonData.tomorrowSunset)?.moon > 0,
     };
+    const nowAngels = getAngles(new Date());
     const now = {
       key: 'Now',
       label: 'Now',
       date: new Date(),
-      visible:
-        (new Date() < moonData.todaySunrise || new Date() > moonData.todaySunset) &&
-        new Date() > moonData.todayMoonrise &&
-        new Date() < moonData.todayMoonset,
+      visible: nowAngels?.moon > 0 && nowAngels?.sun < 0,
     };
 
     const dates = [
